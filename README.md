@@ -31,6 +31,8 @@ Deployed with [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/b
 
 `previews: {}` in `wrangler.jsonc` is required for the preview command.
 
+Set these before the first push: each branch copies the build settings into its own preview trigger the first time it's pushed, so later changes only apply to new branches.
+
 Local development:
 
 ```sh
