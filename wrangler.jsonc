@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "variablelab-www",
+  "main": "./src/index.ts",
+  "compatibility_date": "2026-10-01",
+  // Owns the bare hostname (and creates its DNS record). Project Workers claim
+  // lab.variable.land/<project>/* with their own, more specific routes.
+  "routes": [{ "pattern": "lab.variable.land", "custom_domain": true }],
+  // Workers Builds runs `npx wrangler preview` on non-production branches; it fails without this block.
+  "previews": {}
+}
