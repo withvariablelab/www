@@ -1,6 +1,6 @@
-// Placeholder for the lab.variable.land root until the landing exists.
-// Projects own their paths (lab.variable.land/<project>/*) through their own Worker routes,
-// which are more specific than this custom domain and take precedence.
+// Placeholder for lab.variable.land until the site specified in docs/ is built.
+// A Project with its own docs claims lab.variable.land/<project>/* through its own Worker route,
+// which is more specific than this custom domain and takes precedence.
 
 const ORG_URL = "https://github.com/withvariablelab";
 
@@ -20,7 +20,7 @@ export default {
       });
     }
 
-    // 302, not 301: this becomes the landing later and browsers cache permanent redirects.
+    // 302, not 301: this becomes the Index later and browsers cache permanent redirects.
     return Response.redirect(ORG_URL, 302);
   },
 } satisfies ExportedHandler<Env>;
