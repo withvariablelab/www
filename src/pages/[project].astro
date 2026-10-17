@@ -1,9 +1,15 @@
 ---
-// TEMPORARY: the page lands in the next step. Until then, the frame alone: each Project's head and header
-// (the Signature links to /) and an empty main area.
+// A Project page (docs/design.md#project-page), one per Project in the Index, at /<project>.
+// DOM order is the one-column order: the lead, the facts, the Example and the Closing line, then Also indexed.
+// On desktop the facts sit in the side column, beside the lead and the Example.
 import type { GetStaticPaths } from "astro";
+import Example from "../components/project/Example.astro";
+import InstallCommand from "../components/project/InstallCommand.astro";
+import Shape from "../components/Shape.astro";
+import Text from "../components/Text.astro";
 import Layout from "../layouts/Layout.astro";
-import { getIndex, type Project } from "../lib/content.ts";
+import { getIndex, type Project, separator } from "../lib/content.ts";
+import { aboutLabel, alsoIndexedLabel, factLabels } from "../lib/labels.ts";
 
 export const getStaticPaths = (async () => {
   const index = await getIndex();
@@ -15,8 +21,295 @@ interface Props {
 }
 
 const { project } = Astro.props;
+const { publishedAs } = project;
+
+// Runs on lists the Runtimes as English does, in a comma-separated list.
+const runtimes = project.runtimes && new Intl.ListFormat("en", { type: "unit" }).format(project.runtimes);
+
+// At ≤ 599px the facts are two columns, and Published as takes the full row when one column is too narrow
+// for it: a Package wider than a column at the canvas's phone width (390px, so (390 − 2 × 16 − 24) / 2 =
+// 167px; meta is IBM Plex Mono at 12px, where every glyph is 0.6em wide). An App's line names two things,
+// its Executable and its Package, and always takes the full row, as the canvas draws run-run and vland.
+const phoneColumn = (390 - 2 * 16 - 24) / 2;
+const metaAdvance = 0.6 * 12;
+const publishedAsWide = publishedAs.executable !== undefined || [...publishedAs.package].length * metaAdvance > phoneColumn;
 ---
 
 <Layout page={project}>
-  <main class="column-main"></main>
+  <div class="lead column-main">
+    <div class="name">
+      <Shape project={project} size={56} />
+      <h1 class="type-display"><Text text={project.name} /></h1>
+    </div>
+    <p class="tagline type-lead balance"><Text text={project.tagline} /></p>
+    <p class="body type-body pretty"><Text text={project.body} /></p>
+  </div>
+
+  <aside class="facts column-side" aria-label={aboutLabel(project.name)}>
+    <dl class="fact-list">
+      <div class="fact install">
+        <dt class="type-label">{factLabels.install}</dt>
+        <dd><InstallCommand command={project.installCommand} /></dd>
+      </div>
+      {project.requirement !== undefined && (
+        <div class="fact">
+          <dt class="type-label">{factLabels.requires}</dt>
+          <dd class="type-small">
+            <Text text={project.requirement} />
+          </dd>
+        </div>
+      )}
+      {runtimes !== undefined && (
+        <div class="fact">
+          <dt class="type-label">{factLabels.runsOn}</dt>
+          <dd class="type-small">
+            <Text text={runtimes} />
+          </dd>
+        </div>
+      )}
+      <div class:list={["fact", { "wide-phone": publishedAsWide }]}>
+        <dt class="type-label">{factLabels.publishedAs}</dt>
+        <dd class:list={["published-as", "type-meta", { app: publishedAs.executable !== undefined }]}>
+          {publishedAs.executable !== undefined && (
+            <>
+              <span class="executable">{publishedAs.executable}</span>
+              {separator}
+            </>
+          )}<a class="link-underlined" href={project.npm}>{publishedAs.package}</a>
+        </dd>
+      </div>
+      <div class="fact">
+        <dt class="type-label">{factLabels.links}</dt>
+        <dd class="links type-small">
+          {project.links.map((link) => (
+            <a class="link-underlined" href={link.url}>
+              {link.name}
+            </a>
+          ))}
+        </dd>
+      </div>
+    </dl>
+  </aside>
+
+  <main class="main column-main">
+    <Example example={project.example} />
+    <p class="closing type-small pretty"><Text text={project.closingLine} /></p>
+  </main>
+
+  <aside class="also column-main" aria-label={alsoIndexedLabel}>
+    <p class="also-label type-label">{alsoIndexedLabel}</p>
+    <ul class="also-list type-small">
+      {project.alsoIndexed.map((other) => (
+        <li>
+          <a href={other.path}>
+            <Shape project={other} size={16} />
+            <Text text={other.name} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+
+  {/*
+    Copy (rule 6), for every Install command box on the page: copies the button's data-command, swaps Copy
+    for Copied for 1.2 s, and has the aria-live region after the button announce its data-announcement.
+    Another click within the 1.2 s copies again and restarts them.
+  */}
+  <script is:inline>
+  {
+    const timers = new WeakMap();
+    document.addEventListener("click", async (event) => {
+      const button = event.target instanceof Element ? event.target.closest("button[data-command]") : null;
+      if (button === null) return;
+      try {
+        await navigator.clipboard.writeText(button.dataset.command);
+      } catch {
+        return;
+      }
+      const status = button.nextElementSibling;
+      clearTimeout(timers.get(button));
+      button.dataset.copied = "";
+      // Emptied first, so a second copy is announced again.
+      status.textContent = "";
+      requestAnimationFrame(() => {
+        status.textContent = button.dataset.announcement;
+      });
+      timers.set(
+        button,
+        setTimeout(() => {
+          delete button.dataset.copied;
+          status.textContent = "";
+        }, 1200),
+      );
+    });
+  }
+  </script>
 </Layout>
+
+<style>
+/* Desktop rows: the lead, then the Example and the Closing line, then Also indexed; the facts beside the first two. */
+.lead {
+  --row: 2;
+}
+
+.facts {
+  --row: 2 / span 2;
+}
+
+.main {
+  --row: 3;
+}
+
+.also {
+  --row: 4;
+}
+
+/* The lead */
+
+/* The name stays whole: below the canvas's widths (theme-toggle, under 348px) it goes under the Sign rather than off the page. */
+.name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: 36px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.tagline {
+  margin: 22px 0 0;
+  max-width: 36ch;
+}
+
+.body {
+  margin: 16px 0 0;
+  max-width: 58ch;
+  color: var(--vlab-ink-muted);
+}
+
+/* The facts */
+
+.fact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin: 0;
+}
+
+dt {
+  margin: 0 0 6px;
+  color: var(--vlab-dim);
+}
+
+.install dt {
+  margin-bottom: 8px;
+}
+
+dd {
+  margin: 0;
+}
+
+/* Published as: dim, with an App's Executable in ink; a Library's Package is in ink. */
+.published-as.app {
+  color: var(--vlab-dim);
+}
+
+.executable {
+  color: var(--vlab-ink);
+}
+
+/* The Package is an inline link, as the canvas draws it, and stays whole: an App's line wraps after the separator. */
+.published-as a {
+  white-space: nowrap;
+}
+
+/* The canvas sets Links at 14px with the page's line height. */
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1.45;
+  color: var(--vlab-dim);
+}
+
+.facts a {
+  text-underline-offset: 3px;
+}
+
+.facts a:hover {
+  text-decoration-color: var(--vlab-dim);
+}
+
+/* The Closing line, at 14px with the page's line height, as the canvas sets it. */
+
+.closing {
+  margin: 28px 0 0;
+  line-height: 1.45;
+  color: var(--vlab-dim);
+}
+
+/* Also indexed */
+
+.also {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--vlab-rule);
+}
+
+.also-label {
+  margin: 0 0 10px;
+  color: var(--vlab-dim);
+}
+
+/* Items at 14px with the page's line height, as the canvas sets them; each Sign 10px from its name. */
+.also-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  line-height: 1.45;
+}
+
+.also-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/*
+ * One column: the facts below the lead, as a grid of 3 columns, then 2 at ≤ 599px. The Install command
+ * moves after the other facts and takes the full row, so the Example follows it at the same left edge.
+ */
+@media (max-width: 899px) {
+  .facts {
+    margin-top: 28px;
+  }
+
+  .fact-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: 22px 24px;
+  }
+
+  .install {
+    grid-column: 1 / -1;
+    order: 1;
+  }
+}
+
+@media (max-width: 599px) {
+  .fact-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wide-phone {
+    grid-column: 1 / -1;
+  }
+}
+</style>

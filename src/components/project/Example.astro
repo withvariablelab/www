@@ -1,0 +1,135 @@
+---
+// A Project's Example (docs/design.md#project-page): its Snippets in one block, each with its header
+// (the name, and the language label on the right) above its code. The code is colored by token
+// (src/lib/code.ts) and scrolls horizontally on its own while the header stays.
+import { prompt, snippetLines, syntaxClass } from "../../lib/code.ts";
+import { type Example, separator } from "../../lib/content.ts";
+
+interface Props {
+  example: Example;
+}
+
+const { example } = Astro.props;
+const snippets = await Promise.all(
+  example.snippets.map(async (snippet) => ({
+    snippet,
+    // A File snippet's placement goes after its name: index.html · <head>.
+    title:
+      snippet.kind === "file" && snippet.placement !== undefined
+        ? `${snippet.name}${separator}${snippet.placement}`
+        : snippet.name,
+    lines: await snippetLines(snippet),
+  })),
+);
+// A figure has one caption: a lone Snippet's header is it.
+const Header = snippets.length === 1 ? "figcaption" : "div";
+---
+
+<figure class="example">
+  {snippets.map(({ snippet, title, lines }, index) => (
+    <>
+      <Header class:list={["header", "type-meta", { later: index > 0 }]}>
+        <span class="syntax-keyword">{title}</span>
+        <span class="syntax-comment">{snippet.languageLabel}</span>
+      </Header>
+      <code class:list={["code", "type-code", snippet.kind]}>
+        {lines.map((line) => {
+          if (line.kind === "blank") return <span class="blank" aria-hidden="true"></span>;
+          const tokens = line.tokens.map((token) => <span class={syntaxClass(token.role)}>{token.text}</span>);
+          if (line.kind === "comment") return <span class="comment">{tokens}</span>;
+          return (
+            <span class="line">
+              <span class="gutter syntax-gutter" aria-hidden="true">
+                {line.kind === "code" ? line.number : prompt}
+              </span>
+              {/* An empty line keeps its height with one space. */}
+              <span class="text">{tokens.length > 0 ? tokens : " "}</span>
+            </span>
+          );
+        })}
+      </code>
+    </>
+  ))}
+</figure>
+
+<style>
+.example {
+  margin: 32px 0 0;
+  background: var(--vlab-surface);
+  border: 1px solid var(--vlab-rule);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--vlab-rule);
+}
+
+.later {
+  border-top: 1px solid var(--vlab-rule);
+}
+
+/*
+ * Code never wraps: each line is as wide as its content, so the block scrolls on its own, thin, and keeps
+ * its 16px right padding at the end of the scroll. A File snippet has no left padding: its line numbers take it.
+ */
+.code {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 16px 20px;
+  overflow-x: auto;
+  color: var(--vlab-ink);
+  scrollbar-width: thin;
+  scrollbar-color: var(--vlab-rule-strong) transparent;
+}
+
+.file {
+  padding-left: 0;
+}
+
+.code > span {
+  min-width: max-content;
+}
+
+.line {
+  display: flex;
+}
+
+.gutter {
+  flex: none;
+  user-select: none;
+}
+
+.file .gutter {
+  width: 24px;
+  margin-right: 20px;
+  text-align: right;
+}
+
+.terminal .gutter {
+  width: 2ch;
+}
+
+.text {
+  flex: 1;
+  white-space: pre;
+}
+
+.comment {
+  white-space: pre;
+}
+
+.blank {
+  display: block;
+  height: 20px;
+}
+
+@media (max-width: 899px) {
+  .example {
+    margin-top: 12px;
+  }
+}
+</style>

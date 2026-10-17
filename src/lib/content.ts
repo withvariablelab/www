@@ -74,7 +74,7 @@ const address = "lab.variable.land";
 export const siteName = "Variable Land";
 /** The Index's path. The Signature links here from every other page. */
 export const indexPath = "/";
-const separator = " · ";
+export const separator = " · ";
 const classOrder: ProjectClass[] = ["App", "Library"];
 
 function toSnippet(snippet: StoredSnippet): Snippet {
