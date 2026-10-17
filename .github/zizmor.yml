@@ -5,3 +5,7 @@ rules:
         # First-party withvariablelab/gh-actions is tracked at @main on purpose.
         "withvariablelab/*": ref-pin
         "*": hash-pin
+  dependabot-cooldown:
+    config:
+      # Matches pnpm's minimumReleaseAge (1440 minutes) in pnpm-workspace.yaml.
+      days: 1

@@ -7,3 +7,9 @@ minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
   - "@variablelab/*"
   - "@rrlab/*"
+
+# fflate GHSA-px8p-9vwx-vf98 (unzipSync on malformed ZIP64): satori pins fflate 0.7.3 exactly and
+# only runs while building og:image cards. Dismissed in Dependabot too; drop this when satori moves on.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-px8p-9vwx-vf98
