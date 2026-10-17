@@ -74,3 +74,5 @@ In a shell where mise isn't activated, run them as `mise exec -- <command>`.
 `astro check` is the type check: `rr check` stops at its type-check step, because rr has no plugin for Astro.
 
 CI runs `pnpm rr jsc`, `pnpm astro check` and `pnpm astro build` on each pull request to `main`. It calls the tools through pnpm because mise's GitHub Action puts only mise's shims on the PATH, not `mise.toml`'s `[env]`.
+
+A weekly workflow runs `pnpm audit` on `pnpm-lock.yaml` and keeps an issue labeled `dependency-audit` open while it finds known vulnerabilities. Dependabot opens pull requests for security updates only, never for version updates.
