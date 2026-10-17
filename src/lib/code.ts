@@ -1,8 +1,8 @@
 // Code coloring for the Project page and the og:images: a Command or a Snippet becomes lines of tokens,
 // each with a role of the syntax palette (the skill's color.md). Pages give a role its class (`syntaxClass`);
 // images map it to a hex value with `syntaxColors` from ./brand.ts. Build time only: no client JS.
-import { type BundledLanguage, createHighlighter, type Highlighter, type ThemeRegistration } from "shiki";
-import { colors, type SyntaxRole, syntaxColors } from "./brand.ts";
+import { type BundledLanguage, bundledThemes, createHighlighter, type Highlighter, type ThemeRegistration } from "shiki";
+import { colors, type SyntaxRole, syntaxColors, vesperRoles } from "./brand.ts";
 import type { FileSnippet, Snippet, TerminalSnippet } from "./content.ts";
 
 export type { SyntaxRole } from "./brand.ts";
@@ -63,63 +63,55 @@ function grammar(file: string): BundledLanguage {
   return language;
 }
 
-// TextMate scopes to roles. The canvas is the oracle: whatever no rule names (identifiers, properties,
-// object keys with their colon, braces, parentheses, commas, semicolons, JSX `{ }`) is `text`.
-const scopes: Record<Exclude<SyntaxRole, "text" | "gutter">, string[]> = {
-  keyword: [
-    // import, from, export, as, return; =, ===, ?, : (ternary)
-    "keyword",
-    // const, function, =>
-    "storage",
-    // The * of `import * as`.
-    "constant.language.import-export-all",
-    // <, </ and > in HTML and JSX.
-    "punctuation.definition.tag",
-    // JSX attributes, such as onClick.
-    "entity.other.attribute-name.tsx",
-    "entity.other.attribute-name.jsx",
-    // = between an HTML attribute and its value. In TypeScript the same scope is an object key's colon: text.
-    "punctuation.separator.key-value.html",
-  ],
-  function: [
-    // A function's name where it is called or declared.
-    "entity.name.function",
-    // HTML and JSX tag names, and components.
-    "entity.name.tag",
-    "support.class.component",
-    // HTML attributes, such as src.
-    "entity.other.attribute-name",
-  ],
-  // Strings with their quotes.
-  string: ["string"],
-  comment: ["comment"],
-};
+// Where the canvas departs from Vesper. Every other scope follows Vesper's own rules.
+const canvasRoles: { scope: string[]; role: SyntaxRole }[] = [
+  // The * of `import * as`, which Vesper leaves in its default color.
+  { scope: ["constant.language.import-export-all"], role: "keyword" },
+  // = between an HTML attribute and its value, which Vesper leaves in its default color.
+  { scope: ["punctuation.separator.key-value.html"], role: "keyword" },
+  // JSX's { and }, which Vesper colors like a tag's < and >.
+  { scope: ["punctuation.section.embedded.begin.tsx", "punctuation.section.embedded.end.tsx"], role: "text" },
+];
 
-const theme: ThemeRegistration = {
-  name: "vlab-syntax",
-  type: "dark",
-  fg: syntaxColors.text,
-  bg: colors.surface,
-  settings: [
-    { settings: { foreground: syntaxColors.text } },
-    ...Object.entries(scopes).map(([role, scope]) => ({
-      scope,
-      settings: { foreground: syntaxColors[role as SyntaxRole] },
-    })),
-  ],
-};
+/**
+ * The theme, as the skill's color.md sets it: Vesper's scope rules, each Vesper color swapped for the role that has
+ * it in tokens.json. Any other Vesper color, its third accent (#FF8080) included, is `text`.
+ */
+async function loadTheme(): Promise<ThemeRegistration> {
+  const vesper = (await bundledThemes.vesper()).default;
+  const rules = (vesper.tokenColors ?? []).flatMap(({ scope, settings }) =>
+    settings?.foreground === undefined
+      ? []
+      : [{ scope, settings: { foreground: syntaxColors[vesperRoles.get(settings.foreground.toLowerCase()) ?? "text"] } }],
+  );
+  return {
+    name: "vlab-syntax",
+    type: "dark",
+    fg: syntaxColors.text,
+    bg: colors.surface,
+    settings: [
+      { settings: { foreground: syntaxColors.text } },
+      ...rules,
+      ...canvasRoles.map(({ scope, role }) => ({ scope, settings: { foreground: syntaxColors[role] } })),
+    ],
+  };
+}
 
 // The six syntax colors are distinct, so a color names its role.
 const roleOf = new Map(Object.entries(syntaxColors).map(([role, color]) => [color.toLowerCase(), role as SyntaxRole]));
 
 // Created on the first File snippet, then shared.
-let highlighter: Promise<Highlighter> | undefined;
+let highlighter: Promise<{ highlighter: Highlighter; theme: ThemeRegistration }> | undefined;
 
 /** A File snippet's code, one entry per line, each line's tokens with neighbors of the same role merged. */
 export async function fileLines(snippet: Pick<FileSnippet, "file" | "code">): Promise<Token[][]> {
   const lang = grammar(snippet.file);
-  highlighter ??= createHighlighter({ themes: [theme], langs: Object.values(grammars) });
-  const lines = (await highlighter).codeToTokensBase(snippet.code, { lang, theme });
+  highlighter ??= loadTheme().then(async (theme) => ({
+    highlighter: await createHighlighter({ themes: [theme], langs: Object.values(grammars) }),
+    theme,
+  }));
+  const { highlighter: shiki, theme } = await highlighter;
+  const lines = shiki.codeToTokensBase(snippet.code, { lang, theme });
   return lines.map((line) =>
     line.reduce<Token[]>((tokens, { content, color }) => {
       const role = roleOf.get(color?.toLowerCase() ?? "");

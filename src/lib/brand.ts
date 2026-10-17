@@ -19,6 +19,10 @@ export type SyntaxRole = keyof typeof tokens.syntax;
 export const colors: Record<ColorToken, string> = values(tokens.color);
 /** Each syntax role's hex value. Pages use the role classes of site.css instead; images map roles through this. */
 export const syntaxColors: Record<SyntaxRole, string> = values(tokens.syntax);
+/** Each syntax role by its Vesper color (tokens.json's `vesper`, lowercased), for the code theme of src/lib/code.ts. */
+export const vesperRoles: ReadonlyMap<string, SyntaxRole> = new Map(
+  Object.entries(tokens.syntax).map(([role, { vesper }]) => [vesper.toLowerCase(), role as SyntaxRole]),
+);
 /** The font stacks: `sans` and `mono`. */
 export const fonts: Record<keyof typeof tokens.font, string> = values(tokens.font);
 
