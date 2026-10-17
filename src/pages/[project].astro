@@ -1,0 +1,22 @@
+---
+// TEMPORARY: the page lands in the next step. Until then, the frame alone: each Project's head and header
+// (the Signature links to /) and an empty main area.
+import type { GetStaticPaths } from "astro";
+import Layout from "../layouts/Layout.astro";
+import { getIndex, type Project } from "../lib/content.ts";
+
+export const getStaticPaths = (async () => {
+  const index = await getIndex();
+  return index.projects.map((project) => ({ params: { project: project.name }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<Layout page={project}>
+  <main class="column-main"></main>
+</Layout>

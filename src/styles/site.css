@@ -1,0 +1,273 @@
+/*
+ * The frame every page shares (docs/design.md#frame), imported once by src/layouts/Layout.astro.
+ * Colors, font families and syntax colors only come from the brand's tokens: --vlab-*.
+ * Breakpoints, as in the canvas: one column at (max-width: 899px), the phone padding at (max-width: 599px).
+ */
+@import "@variablelab/brand/tokens.css";
+/* IBM Plex from Fontsource, unmodified: the latin subset of each weight the pages set. */
+@import "@fontsource/ibm-plex-sans/latin-400.css";
+@import "@fontsource/ibm-plex-sans/latin-500.css";
+@import "@fontsource/ibm-plex-mono/latin-400.css";
+
+/* Page */
+
+body {
+  margin: 0;
+  background: var(--vlab-ground);
+  color: var(--vlab-ink);
+  font-family: var(--vlab-font-sans);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Links: no underline at rest; on hover the text turns ink, with a dim underline at a 4px offset. */
+
+:where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+:where(a):hover {
+  color: var(--vlab-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--vlab-dim);
+  text-underline-offset: 4px;
+}
+
+/*
+ * An underlined link: a 1px rule-strong underline, at rest and on hover.
+ * The element sets its offset (text-underline-offset) and its underline color on hover.
+ */
+.link-underlined {
+  text-decoration: underline;
+  text-decoration-color: var(--vlab-rule-strong);
+  text-decoration-thickness: 1px;
+}
+
+:focus-visible {
+  outline: 1px solid var(--vlab-dim);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--vlab-rule-strong);
+  color: var(--vlab-ink);
+}
+
+/* Container: the header spans both columns (src/components/Header.astro). */
+
+.container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  column-gap: 64px;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 28px 48px 140px;
+  box-sizing: border-box;
+}
+
+/*
+ * The two columns. A page puts each block of its own in one, and picks its row with --row
+ * (`grid-row` syntax, such as `2` or `2 / span 2`). In one column every block falls in source order,
+ * and the side column is static, with no top padding.
+ */
+.column-main {
+  grid-column: 1;
+  grid-row: var(--row, auto);
+}
+
+.column-side {
+  grid-column: 2;
+  grid-row: var(--row, auto);
+  position: sticky;
+  top: 28px;
+  align-self: start;
+  padding-top: 36px;
+}
+
+@media (max-width: 899px) {
+  .container {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 24px 32px 120px;
+  }
+
+  .column-main,
+  .column-side {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .column-side {
+    position: static;
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 599px) {
+  .container {
+    padding: 20px 16px 96px;
+  }
+}
+
+/*
+ * Type scale: the steps of the skill's typography.md, each with its family, size, line height, weight and tracking.
+ * ui, inline code, meta and label set no line height: they keep the one they sit in.
+ * Raw values that leave the scale on purpose (docs/design.md) are set by the page.
+ */
+
+.type-display {
+  font-family: var(--vlab-font-sans);
+  font-size: 42px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+.type-title {
+  font-family: var(--vlab-font-sans);
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.type-heading {
+  font-family: var(--vlab-font-sans);
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.type-lead {
+  font-family: var(--vlab-font-sans);
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.type-body {
+  font-family: var(--vlab-font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.type-small {
+  font-family: var(--vlab-font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* 400; a name sets 500 and its own tracking. */
+.type-ui {
+  font-family: var(--vlab-font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.type-inline-code {
+  font-family: var(--vlab-font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--vlab-ink);
+}
+
+.type-code {
+  font-family: var(--vlab-font-mono);
+  font-size: 12.5px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.type-meta {
+  font-family: var(--vlab-font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.type-label {
+  font-family: var(--vlab-font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Text flow: titles and one-line statements balance, paragraphs are pretty, a hyphenated term stays whole. */
+
+.balance {
+  text-wrap: balance;
+}
+
+.pretty {
+  text-wrap: pretty;
+}
+
+.term {
+  white-space: nowrap;
+}
+
+/* Shapes: a Sign or a Class stamp (src/components/Shape.astro), in ink. */
+
+.shape {
+  display: block;
+  flex: none;
+  color: var(--vlab-ink);
+}
+
+/* UI icons (src/components/Icon.astro): currentColor, so they take the color of the control that holds them. */
+
+.icon {
+  display: block;
+  flex: none;
+}
+
+/* Syntax roles (src/lib/code.ts, syntaxClass): one class per role of color.md's syntax palette. */
+
+.syntax-text {
+  color: var(--vlab-syntax-text);
+}
+
+.syntax-keyword {
+  color: var(--vlab-syntax-keyword);
+}
+
+.syntax-function {
+  color: var(--vlab-syntax-function);
+}
+
+.syntax-string {
+  color: var(--vlab-syntax-string);
+}
+
+.syntax-comment {
+  color: var(--vlab-syntax-comment);
+}
+
+.syntax-gutter {
+  color: var(--vlab-syntax-gutter);
+}
+
+/* Hidden on screen, read by assistive technology: the aria-live region that announces a copy. */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -70,7 +70,10 @@ export interface Index extends Omit<StoredIndex, "projects"> {
 }
 
 const address = "lab.variable.land";
-const siteName = "Variable Land";
+/** The Index's title: the name in the Signature, and every page's og:site_name. */
+export const siteName = "Variable Land";
+/** The Index's path. The Signature links here from every other page. */
+export const indexPath = "/";
 const separator = " · ";
 const classOrder: ProjectClass[] = ["App", "Library"];
 
@@ -147,7 +150,7 @@ export async function getIndex(): Promise<Index> {
     address,
     title: siteName,
     ogAlt: `${siteName} — ${stored.intro}`,
-    path: "/",
+    path: indexPath,
     ogImage: "/og.png",
   };
 }

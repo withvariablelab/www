@@ -1,27 +1,12 @@
 ---
-// TEMPORARY: a plain dump of the loaded and derived content, so `astro build` exercises the content loaders.
-// It is not the Index: the real page (docs/design.md) replaces it.
+// TEMPORARY: the page lands in the next step. Until then, the frame alone: the Index's head and header
+// (the Signature is not a link) and an empty main area.
+import Layout from "../layouts/Layout.astro";
 import { getIndex } from "../lib/content.ts";
 
 const index = await getIndex();
-const dump = JSON.stringify(
-  {
-    ...index,
-    projects: index.projects.map((project) => ({ ...project, alsoIndexed: project.alsoIndexed.map(({ name }) => name) })),
-    byClass: index.byClass.map((group) => ({ class: group.class, projects: group.projects.map(({ name }) => name) })),
-  },
-  null,
-  2,
-);
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>{index.title}</title>
-  </head>
-  <body>
-    <pre>{dump}</pre>
-  </body>
-</html>
+<Layout page={index}>
+  <main class="column-main"></main>
+</Layout>
