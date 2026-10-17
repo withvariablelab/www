@@ -177,7 +177,7 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
 | Published as | `meta` | `dim`, an App's Executable `ink`, a Library's Package `ink`; the Package is an underlined link at a 3px offset | |
 | Links | `small`, each an underlined link at a 3px offset | `dim`; underline `dim` on hover | A column, `gap: 4px` |
 | Install command box | `label` at line height 1.5, the Command colored by token ([content-model.md](content-model.md#command)), one line | `surface` background, 1px `rule` border, `rule-strong` on hover | `min-height: 44px`, `padding: 10px 12px`, full width of its column, the Command on the left and the icon on the right, 10px apart |
-| Copy, Copied icon | The skill's UI icons, at their size | `dim`, `ink` while the box is hovered | |
+| Copy, Copied icon | UI icons, drawn as [Copy and Copied icons](#copy-and-copied-icons) gives | `dim`, `ink` while the box is hovered | 14px |
 | Example | | `surface` background, 1px `rule` border | `margin-top: 32px`, 12px in one column |
 | Snippet header | `meta` | The name in the syntax `keyword` color, the language label in the syntax `comment` color | The name on the left and the label on the right (`space-between`, baseline, `gap: 16px`), `padding: 10px 16px`, a 1px `rule` below; a later Snippet's header also has one above |
 | Snippet code | `code` | `ink`, colored by token with the syntax palette | `padding: 18px 16px 20px`; a File snippet has no left padding, because its line numbers take it |
@@ -196,6 +196,15 @@ Snippet code follows the text flow in the skill's `typography.md`; in a Terminal
 - The scrollbar is thin, `rule-strong` on transparent.
 
 The Install command fits its box on one line. `text-overflow: ellipsis` is a last resort: when a Command doesn't fit, adjust the box or the type instead.
+
+### Copy and Copied icons
+
+The two icons of the Install command box (rule 6). Each is drawn on `viewBox 0 0 16 16` by the stroke rules for UI icons in the skill's `iconography.md`.
+
+| Icon | Use | Geometry |
+| --- | --- | --- |
+| Copy | Copies the Install command. | `<rect x="5.75" y="5.75" width="8.5" height="8.5"/>` and `<path d="M2.75 10.25V2.75h7.5"/>` |
+| Copied | Replaces Copy for 1.2 s after a copy. | `<path d="M3 8.5l3.25 3.25L13 5"/>` |
 
 ## og:image
 
