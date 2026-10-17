@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /env/api/
+
+Sitemap: https://lab.variable.land/env/sitemap.xml

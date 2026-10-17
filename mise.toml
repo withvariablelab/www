@@ -1,0 +1,9 @@
+[env]
+_.path = ["{{config_root}}/node_modules/.bin"]
+
+[tools]
+node = "24"
+pnpm = "10.30.3"
+
+[settings]
+lockfile = true
