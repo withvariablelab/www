@@ -53,6 +53,8 @@ Every page:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#14120e">
+<title>{title}</title>
+<meta name="description" content="{description}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="canonical" href="https://lab.variable.land{path}">
@@ -234,16 +236,16 @@ Every `og:image` has the same frame:
      - A File snippet has `padding: 22px 0` and line numbers 30px wide, right-aligned, in `gutter`, 24px before the code.
      - A Terminal snippet has `padding: 22px 28px` and no line numbers. Its comments are in `comment`, each Command gets a `$ ` prompt, and the line between groups is a blank 34px.
 
-## Open decisions
+## Decisions
 
-Left to whoever implements the site.
+What this file left to the implementation, and what was chosen.
 
-- How the pages are rendered and with what.
-- Where the content lives ([content-model.md](content-model.md) is its schema).
-- How each `og:image` is generated and cached.
-- How the tokens, fonts and shapes reach the pages. `@variablelab/brand` publishes the tokens as CSS and JSON, the Logo and the Class stamps. The `vlab-brand` skill says where the IBM Plex files come from and which format each medium needs.
-- How code gets colored, as long as the result follows the syntax palette in the skill's `color.md`.
-- Exporting `favicon.svg` and `apple-touch-icon.png` from the Logo.
+- **Rendering:** Astro 7, static output, with no adapter and no UI framework. `build.format: 'file'` and `trailingSlash: 'never'` build each page to `/<page>.html`. The Worker has no script: it serves `dist/` as static assets with `html_handling: "drop-trailing-slash"`, so `/<project>/` and `/<project>.html` redirect to `/<project>`, and `/<project>` never redirects. Copy is a small inline script.
+- **Content:** Astro content collections, defined in `src/content.config.ts` with Zod from `astro/zod`. Each Project is a YAML file in `src/content/projects/`, and the Index with its Keeper is `src/content/index.yaml`. The schema enforces the rules of [content-model.md](content-model.md), and `src/lib/content.ts` computes the derived fields. The fixed words this file names (the fact labels, `Also indexed`, the Class headings, `Copy:`, `Copied`, `About {name}`) live in `src/lib/labels.ts`.
+- **`og:image`:** the static endpoints `src/pages/og.png.ts` and `src/pages/og/[project].png.ts` draw each image from the content with satori and rasterize it with sharp at build time. Cloudflare serves them as static assets, so an image changes only when a build changes it.
+- **Tokens, fonts and shapes:** `src/styles/site.css` imports `@variablelab/brand/tokens.css` and Fontsource's latin CSS for IBM Plex Sans 400 and 500 and Mono 400, so browsers load woff2. The `og:image`s read Fontsource's woff files. `src/lib/brand.ts` reads `tokens.json`, the Logo and the Class stamps from `@variablelab/brand` at build time.
+- **Code coloring** (`src/lib/code.ts`): a Command by the shell rule of the skill's `color.md`. Its first token is `function`, a flag is `text` and every other token is `string`. A File snippet is colored by Shiki, with a theme built from Vesper's own scope rules: each Vesper color becomes the role that has it in `tokens.json`. The pages and the `og:image`s share the same tokens.
+- **Icons:** `/favicon.svg` serves `assets/logo.svg` unchanged, and sharp renders `/apple-touch-icon.png` from it.
 
 ## External dependency
 

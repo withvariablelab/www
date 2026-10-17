@@ -4,6 +4,7 @@
   "compatibility_date": "2026-10-01",
   // Assets only, no Worker script: serves what `astro build` writes to ./dist.
   // drop-trailing-slash serves dist/<project>.html at /<project> and redirects /<project>/ and /<project>.html there.
+  // Never redirect /<project> to /<project>/: a Project's own Worker may send /<project>/ to /<project>, as env's does.
   // No not_found_handling, so an unknown path gets Cloudflare's own 404.
   "assets": { "directory": "./dist", "html_handling": "drop-trailing-slash" },
   // Owns the bare hostname (and creates its DNS record). A Project with its own docs claims
