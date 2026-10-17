@@ -1,6 +1,9 @@
 ---
 // The one layout of every page: the head of docs/design.md#head, then the container with the header,
 // then the page's own blocks (the slot), placed in .column-main and .column-side (src/styles/site.css).
+import monoRegular from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url";
+import sansRegular from "@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url";
+import sansMedium from "@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff2?url";
 import "../styles/site.css";
 import Header from "../components/Header.astro";
 import { colors } from "../lib/brand.ts";
@@ -41,6 +44,9 @@ const ogImage = new URL(page.ogImage, Astro.site).href;
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content={page.ogAlt}>
     <meta name="twitter:card" content="summary_large_image">
+    {[sansRegular, sansMedium, monoRegular].map((href) => (
+      <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+    ))}
   </head>
   <body>
     <div class="container">
