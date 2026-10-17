@@ -1,0 +1,27 @@
+---
+// TEMPORARY: a plain dump of the loaded and derived content, so `astro build` exercises the content loaders.
+// It is not the Index: the real page (docs/design.md) replaces it.
+import { getIndex } from "../lib/content.ts";
+
+const index = await getIndex();
+const dump = JSON.stringify(
+  {
+    ...index,
+    projects: index.projects.map((project) => ({ ...project, alsoIndexed: project.alsoIndexed.map(({ name }) => name) })),
+    byClass: index.byClass.map((group) => ({ class: group.class, projects: group.projects.map(({ name }) => name) })),
+  },
+  null,
+  2,
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{index.title}</title>
+  </head>
+  <body>
+    <pre>{dump}</pre>
+  </body>
+</html>
