@@ -1,6 +1,6 @@
 /*
  * The frame every page shares (docs/design.md#frame), imported once by src/layouts/Layout.astro.
- * Colors, font families and syntax colors only come from the brand's tokens: --vlab-*.
+ * Colors, font families, syntax colors and the type scale only come from the brand's tokens: --vlab-*.
  * Breakpoints, as in docs/design.md#frame: one column at (max-width: 899px), the phone padding at (max-width: 599px).
  */
 @import "@variablelab/brand/tokens.css";
@@ -112,95 +112,95 @@ body {
 }
 
 /*
- * Type scale: the steps of the skill's typography.md, each with its family, size, line height, weight and tracking.
- * ui, inline code, meta and label set no line height: they keep the one they sit in.
+ * Type scale: one class per step of the skill's typography.md, each from the brand's --vlab-type-<step>-* tokens.
+ * ui, inline-code, meta and label set no line height: they keep the one they sit in.
  * Raw values that leave the scale on purpose (docs/design.md) are set by the page.
  */
 
 .type-display {
-  font-family: var(--vlab-font-sans);
-  font-size: 42px;
-  line-height: 1;
-  font-weight: 500;
-  letter-spacing: -0.035em;
+  font-family: var(--vlab-type-display-family);
+  font-size: var(--vlab-type-display-size);
+  line-height: var(--vlab-type-display-line-height);
+  font-weight: var(--vlab-type-display-weight);
+  letter-spacing: var(--vlab-type-display-tracking);
 }
 
 .type-title {
-  font-family: var(--vlab-font-sans);
-  font-size: 26px;
-  line-height: 1.2;
-  font-weight: 500;
-  letter-spacing: -0.025em;
+  font-family: var(--vlab-type-title-family);
+  font-size: var(--vlab-type-title-size);
+  line-height: var(--vlab-type-title-line-height);
+  font-weight: var(--vlab-type-title-weight);
+  letter-spacing: var(--vlab-type-title-tracking);
 }
 
 .type-heading {
-  font-family: var(--vlab-font-sans);
-  font-size: 22px;
-  line-height: 1.15;
-  font-weight: 500;
-  letter-spacing: -0.025em;
+  font-family: var(--vlab-type-heading-family);
+  font-size: var(--vlab-type-heading-size);
+  line-height: var(--vlab-type-heading-line-height);
+  font-weight: var(--vlab-type-heading-weight);
+  letter-spacing: var(--vlab-type-heading-tracking);
 }
 
 .type-lead {
-  font-family: var(--vlab-font-sans);
-  font-size: 20px;
-  line-height: 1.3;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  font-family: var(--vlab-type-lead-family);
+  font-size: var(--vlab-type-lead-size);
+  line-height: var(--vlab-type-lead-line-height);
+  font-weight: var(--vlab-type-lead-weight);
+  letter-spacing: var(--vlab-type-lead-tracking);
 }
 
 .type-body {
-  font-family: var(--vlab-font-sans);
-  font-size: 16px;
-  line-height: 1.55;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: var(--vlab-type-body-family);
+  font-size: var(--vlab-type-body-size);
+  line-height: var(--vlab-type-body-line-height);
+  font-weight: var(--vlab-type-body-weight);
+  letter-spacing: var(--vlab-type-body-tracking);
 }
 
 .type-small {
-  font-family: var(--vlab-font-sans);
-  font-size: 14px;
-  line-height: 1.5;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: var(--vlab-type-small-family);
+  font-size: var(--vlab-type-small-size);
+  line-height: var(--vlab-type-small-line-height);
+  font-weight: var(--vlab-type-small-weight);
+  letter-spacing: var(--vlab-type-small-tracking);
 }
 
 /* 400; a name sets 500 and its own tracking. */
 .type-ui {
-  font-family: var(--vlab-font-sans);
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: var(--vlab-type-ui-family);
+  font-size: var(--vlab-type-ui-size);
+  font-weight: var(--vlab-type-ui-weight);
+  letter-spacing: var(--vlab-type-ui-tracking);
 }
 
 .type-inline-code {
-  font-family: var(--vlab-font-mono);
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: var(--vlab-type-inline-code-family);
+  font-size: var(--vlab-type-inline-code-size);
+  font-weight: var(--vlab-type-inline-code-weight);
+  letter-spacing: var(--vlab-type-inline-code-tracking);
   color: var(--vlab-ink);
 }
 
 .type-code {
-  font-family: var(--vlab-font-mono);
-  font-size: 12.5px;
-  line-height: 20px;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: var(--vlab-type-code-family);
+  font-size: var(--vlab-type-code-size);
+  line-height: var(--vlab-type-code-line-height);
+  font-weight: var(--vlab-type-code-weight);
+  letter-spacing: var(--vlab-type-code-tracking);
 }
 
 .type-meta {
-  font-family: var(--vlab-font-mono);
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: var(--vlab-type-meta-family);
+  font-size: var(--vlab-type-meta-size);
+  font-weight: var(--vlab-type-meta-weight);
+  letter-spacing: var(--vlab-type-meta-tracking);
 }
 
 .type-label {
-  font-family: var(--vlab-font-mono);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: var(--vlab-type-label-family);
+  font-size: var(--vlab-type-label-size);
+  font-weight: var(--vlab-type-label-weight);
+  letter-spacing: var(--vlab-type-label-tracking);
 }
 
 /* Text flow: titles and one-line statements balance, paragraphs are pretty, a hyphenated term stays whole. */
