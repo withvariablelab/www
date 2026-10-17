@@ -1,0 +1,94 @@
+---
+// The Install command box (docs/design.md#project-page, rule 6): the whole box is the Copy button. It shows
+// the Command colored by token, and the Copy icon on its right. The page's script (src/pages/[project].astro)
+// copies data-command, swaps Copy for Copied, and writes data-announcement into the aria-live region,
+// which is the button's next sibling.
+import { commandTokens, syntaxClass } from "../../lib/code.ts";
+import { copiedAnnouncement, copyLabel } from "../../lib/labels.ts";
+import Icon from "../Icon.astro";
+
+interface Props {
+  /** The Install command, copied as is. */
+  command: string;
+}
+
+const { command } = Astro.props;
+---
+
+<button
+  type="button"
+  class="command type-label"
+  aria-label={copyLabel(command)}
+  data-command={command}
+  data-announcement={copiedAnnouncement}
+>
+  <code class="command-text"
+    >{commandTokens(command).map((token) => <span class={syntaxClass(token.role)}>{token.text}</span>)}</code
+  >
+  <span class="command-icon command-copy" aria-hidden="true"><Icon name="copy" /></span>
+  <span class="command-icon command-copied" aria-hidden="true"><Icon name="copied" /></span>
+</button>
+<span class="visually-hidden" aria-live="polite"></span>
+
+<style>
+/* Label type at line height 1.5, on one line: the Command on the left, the icon on the right, 10px apart. */
+.command {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--vlab-surface);
+  border: 1px solid var(--vlab-rule);
+  color: var(--vlab-ink);
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+}
+
+.command:hover {
+  border-color: var(--vlab-rule-strong);
+}
+
+/* The Command fits on one line; the ellipsis is the last resort the box is sized to avoid. */
+.command-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.command-icon {
+  display: block;
+  flex: none;
+  color: var(--vlab-dim);
+}
+
+.command:hover .command-icon {
+  color: var(--vlab-ink);
+}
+
+/* Copy at rest; Copied for a moment after a copy (data-copied, set by the page's script). */
+.command-copied,
+.command[data-copied] .command-copy {
+  display: none;
+}
+
+.command[data-copied] .command-copied {
+  display: block;
+}
+
+/* At 600–899px the box is half the width. It grows past half only when the Command would not fit. */
+@media (min-width: 600px) and (max-width: 899px) {
+  .command {
+    width: max-content;
+    min-width: 50%;
+    max-width: 100%;
+  }
+}
+</style>

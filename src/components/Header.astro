@@ -1,0 +1,69 @@
+---
+// The header of every page (docs/design.md#frame): the page's Address, and the Signature,
+// which links to the Index from every other page.
+import { logoSvg } from "../lib/brand.ts";
+import { indexPath } from "../lib/content.ts";
+import { signatureName } from "../lib/labels.ts";
+import Text from "./Text.astro";
+
+interface Props {
+  /** The page's Address, such as lab.variable.land/env. */
+  address: string;
+  /** The page's path: on the Index the Signature is not a link. */
+  path: string;
+}
+
+const { address, path } = Astro.props;
+const Signature = path === indexPath ? "span" : "a";
+const logo = logoSvg({ width: 16, height: 18, "aria-hidden": "true" });
+// On narrow screens the Address may wrap after a "/", never inside a term.
+const addressParts = address.split(/(?<=\/)/);
+---
+
+<header class="header">
+  <span class="address type-meta"
+    >{addressParts.map((part, index) => (
+      <>
+        {index > 0 && <wbr />}
+        <Text text={part} />
+      </>
+    ))}</span
+  >
+  <Signature class="signature type-ui" href={Signature === "a" ? indexPath : undefined}>
+    <Fragment set:html={logo} />{signatureName}
+  </Signature>
+</header>
+
+<style>
+.header {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--vlab-rule);
+}
+
+.address {
+  color: var(--vlab-dim);
+}
+
+/* One mark: it never wraps. */
+.signature {
+  flex: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--vlab-ink);
+}
+
+.signature :global(svg) {
+  display: block;
+  flex: none;
+}
+</style>

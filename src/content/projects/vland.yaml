@@ -1,0 +1,29 @@
+name: "vland"
+class: "App"
+sign: "M2 2h8v8h4v4h8v8H2V2z"
+tagline: "Starts a project in Variable Land."
+body: "A library, a backend or a monorepo. Every template targets Node, uses pnpm and ships rr as the one entry point for lint, format, type-check and build."
+installCommand: "pnpm add -g @variablelab/vland"
+executable: "vland"
+package: "@variablelab/vland"
+requirement: "Node 20 or later"
+repository: "https://github.com/withvariablelab/dx/tree/main/vland/cli"
+links:
+  - name: "CLI reference"
+    url: "https://github.com/withvariablelab/dx/blob/main/vland/cli/CLI.md"
+  - name: "GitHub"
+    url: "https://github.com/withvariablelab/dx/tree/main/vland/cli"
+example:
+  snippets:
+    - groups:
+        - comment: "interactive"
+          commands:
+            - "vland init"
+        - comment: "explicit template"
+          commands:
+            - "vland init my-app -t library"
+        - comment: "skip install and git init"
+          commands:
+            - "vland init my-app -t backend --no-install --no-git"
+closingLine: "No upgrade command. After init, the project is yours."
+description: "Starts a project in Variable Land. A library, a backend or a monorepo."

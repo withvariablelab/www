@@ -1,0 +1,19 @@
+---
+// A filled shape (the skill's iconography.md), aria-hidden and in ink: a Project's Sign, or its Class stamp
+// when it has none (`project`), or a Class's stamp alone, as beside a Class heading (`projectClass`).
+import { shapePath, stampPaths } from "../lib/brand.ts";
+import type { Project, ProjectClass } from "../lib/content.ts";
+
+type Props = {
+  /** Width and height in px: 28 in an Index row, 56 beside a Project page's name, 16 beside text. */
+  size: number;
+  class?: string;
+} & ({ project: Pick<Project, "sign" | "class"> } | { projectClass: ProjectClass });
+
+const { size, class: className } = Astro.props;
+const d = "project" in Astro.props ? shapePath(Astro.props.project) : stampPaths[Astro.props.projectClass];
+---
+
+<svg class:list={["shape", className]} width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+  <path fill="currentColor" fill-rule="evenodd" d={d}></path>
+</svg>

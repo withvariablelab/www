@@ -1,0 +1,20 @@
+# The Index, the page at `/`. Its one entry's id is `index`.
+index:
+  intro: "A public index of apps and libraries."
+  unpublishedLine: "Variable Land also builds software that isn't published here."
+  keeper:
+    name: "rcrd"
+    site:
+      name: "rcrd.space"
+      url: "https://rcrd.space"
+    statement: "I keep this index. I don't ship a tool I wouldn't put in a repo I have to maintain."
+    github:
+      name: "GitHub"
+      url: "https://github.com/withvariablelab"
+  # The Projects in Index order: see docs/content-model.md#index.
+  projects:
+    - "run-run"
+    - "vland"
+    - "env"
+    - "theme-toggle"
+  description: "A public index of apps and libraries. Variable Land also builds software that isn't published here."

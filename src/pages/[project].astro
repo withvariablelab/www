@@ -1,0 +1,341 @@
+---
+// A Project page (docs/design.md#project-page), one per Project in the Index, at /<project>.
+// DOM order is the one-column order: the lead, the facts, the Example and the Closing line, then Also indexed.
+// On desktop the facts sit in the side column, beside the lead and the Example.
+import type { GetStaticPaths } from "astro";
+import Example from "../components/project/Example.astro";
+import InstallCommand from "../components/project/InstallCommand.astro";
+import Shape from "../components/Shape.astro";
+import Text from "../components/Text.astro";
+import Layout from "../layouts/Layout.astro";
+import { getIndex, type Project, separator } from "../lib/content.ts";
+import { aboutLabel, alsoIndexedLabel, factLabels } from "../lib/labels.ts";
+
+export const getStaticPaths = (async () => {
+  const index = await getIndex();
+  return index.projects.map((project) => ({ params: { project: project.name }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { publishedAs } = project;
+
+// Runs on lists the Runtimes as English does, in a comma-separated list. Its last two Runtimes and the separator
+// between them (the list's last three parts) stay on one line, in a `term`, so the list never ends on a single
+// Runtime, which text-wrap pretty alone allows.
+const runtimeParts = project.runtimes && new Intl.ListFormat("en", { type: "unit" }).formatToParts(project.runtimes);
+const joinParts = (parts: { value: string }[]) => parts.map((part) => part.value).join("");
+const runtimes = runtimeParts && { head: joinParts(runtimeParts.slice(0, -3)), last: joinParts(runtimeParts.slice(-3)) };
+
+// At ≤ 599px the facts are two columns. Published as takes the full row for an App, whose line names its
+// Executable and its Package, and for a Library whose Package is wider than one column at the 390px phone
+// width of docs/design.md#verifying: (390 − 2 × 16 − 24) / 2 = 167px, with meta in IBM Plex Mono at 12px,
+// where every glyph is 0.6em wide.
+const phoneColumn = (390 - 2 * 16 - 24) / 2;
+const metaAdvance = 0.6 * 12;
+const publishedAsWide = publishedAs.executable !== undefined || [...publishedAs.package].length * metaAdvance > phoneColumn;
+
+// A scoped Package, such as @variablelab/theme-toggle, splits after its scope: the one place it may break.
+const scopeLength = publishedAs.package.startsWith("@") ? publishedAs.package.indexOf("/") + 1 : 0;
+const packageScope = publishedAs.package.slice(0, scopeLength);
+const packageName = publishedAs.package.slice(scopeLength);
+---
+
+<Layout page={project}>
+  <div class="lead column-main">
+    <div class="name">
+      <Shape project={project} size={56} />
+      <h1 class="type-display"><Text text={project.name} /></h1>
+    </div>
+    <p class="tagline type-lead balance"><Text text={project.tagline} /></p>
+    <p class="body type-body pretty"><Text text={project.body} /></p>
+  </div>
+
+  <aside class="facts column-side" aria-label={aboutLabel(project.name)}>
+    <dl class="fact-list">
+      <div class="fact install">
+        <dt class="type-label">{factLabels.install}</dt>
+        <dd><InstallCommand command={project.installCommand} /></dd>
+      </div>
+      {project.requirement !== undefined && (
+        <div class="fact">
+          <dt class="type-label">{factLabels.requires}</dt>
+          <dd class="type-small pretty">
+            <Text text={project.requirement} />
+          </dd>
+        </div>
+      )}
+      {runtimes !== undefined && (
+        <div class="fact">
+          <dt class="type-label">{factLabels.runsOn}</dt>
+          <dd class="type-small pretty">
+            <Text text={runtimes.head} />
+            <span class="term">
+              <Text text={runtimes.last} />
+            </span>
+          </dd>
+        </div>
+      )}
+      <div class:list={["fact", { "wide-phone": publishedAsWide }]}>
+        <dt class="type-label">{factLabels.publishedAs}</dt>
+        <dd class:list={["published-as", "type-meta", { app: publishedAs.executable !== undefined }]}>
+          {publishedAs.executable !== undefined && (
+            <>
+              <span class="executable">{publishedAs.executable}</span>
+              {separator}
+            </>
+          )}<span class="package"
+            ><a class="link-underlined" href={project.npm} aria-label={publishedAs.package}
+              >{packageScope !== "" && (
+                <>
+                  <span class="term">{packageScope}</span>
+                  <wbr />
+                </>
+              )}<span class="term">{packageName}</span></a
+            ></span
+          >
+        </dd>
+      </div>
+      <div class="fact">
+        <dt class="type-label">{factLabels.links}</dt>
+        <dd class="links type-small">
+          {project.links.map((link) => (
+            <a class="link-underlined" href={link.url}>
+              {link.name}
+            </a>
+          ))}
+        </dd>
+      </div>
+    </dl>
+  </aside>
+
+  <main class="main column-main">
+    <Example example={project.example} />
+    <p class="closing type-small pretty"><Text text={project.closingLine} /></p>
+  </main>
+
+  <aside class="also column-main" aria-label={alsoIndexedLabel}>
+    <p class="also-label type-label">{alsoIndexedLabel}</p>
+    <ul class="also-list type-small">
+      {project.alsoIndexed.map((other) => (
+        <li>
+          <a href={other.path}>
+            <Shape project={other} size={16} />
+            <Text text={other.name} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+
+  {/*
+    Copy (rule 6), for every Install command box on the page: copies the button's data-command, swaps Copy
+    for Copied for 1.2 s, and has the aria-live region after the button announce its data-announcement.
+    Another click within the 1.2 s copies again and restarts them.
+  */}
+  <script is:inline>
+  {
+    const timers = new WeakMap();
+    document.addEventListener("click", async (event) => {
+      const button = event.target instanceof Element ? event.target.closest("button[data-command]") : null;
+      if (button === null) return;
+      try {
+        await navigator.clipboard.writeText(button.dataset.command);
+      } catch {
+        return;
+      }
+      const status = button.nextElementSibling;
+      clearTimeout(timers.get(button));
+      button.dataset.copied = "";
+      // Emptied first, so a second copy is announced again.
+      status.textContent = "";
+      requestAnimationFrame(() => {
+        status.textContent = button.dataset.announcement;
+      });
+      timers.set(
+        button,
+        setTimeout(() => {
+          delete button.dataset.copied;
+          status.textContent = "";
+        }, 1200),
+      );
+    });
+  }
+  </script>
+</Layout>
+
+<style>
+/* Desktop rows: the lead, then the Example and the Closing line, then Also indexed; the facts beside the first two. */
+.lead {
+  --row: 2;
+}
+
+.facts {
+  --row: 2 / span 2;
+}
+
+.main {
+  --row: 3;
+}
+
+.also {
+  --row: 4;
+}
+
+/* The lead */
+
+/* The name stays whole: on narrow screens it goes under the Sign rather than off the page. */
+.name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: 36px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.tagline {
+  margin: 22px 0 0;
+  max-width: 36ch;
+}
+
+.body {
+  margin: 16px 0 0;
+  max-width: 58ch;
+  color: var(--vlab-ink-muted);
+}
+
+/* The facts */
+
+.fact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin: 0;
+}
+
+dt {
+  margin: 0 0 6px;
+  color: var(--vlab-dim);
+}
+
+.install dt {
+  margin-bottom: 8px;
+}
+
+dd {
+  margin: 0;
+}
+
+/* Published as: dim, with an App's Executable in ink; a Library's Package is in ink. */
+.published-as.app {
+  color: var(--vlab-dim);
+}
+
+.executable {
+  color: var(--vlab-ink);
+}
+
+/*
+ * The Package is one inline block, so it stays whole wherever it fits: an App's line wraps after the separator and
+ * the Package moves down whole. Only when its column is narrower than the Package does it break, after its scope (the
+ * <wbr>), never inside the scope or the name. The link inside stays inline, so its underline and focus ring hug the
+ * text, and its aria-label keeps its accessible name exactly the Package, which a browser may otherwise split with a
+ * space at the <wbr>.
+ */
+.package {
+  display: inline-block;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--vlab-dim);
+}
+
+.facts a {
+  text-underline-offset: 3px;
+}
+
+.facts a:hover {
+  text-decoration-color: var(--vlab-dim);
+}
+
+/* The Closing line */
+
+.closing {
+  margin: 28px 0 0;
+  color: var(--vlab-dim);
+}
+
+/* Also indexed */
+
+.also {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--vlab-rule);
+}
+
+.also-label {
+  margin: 0 0 10px;
+  color: var(--vlab-dim);
+}
+
+/* Items wrap; each Sign 10px from its name. */
+.also-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.also-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/*
+ * One column: the facts below the lead, as a grid of 3 columns, then 2 at ≤ 599px. The Install command
+ * moves after the other facts and takes the full row, so the Example follows it at the same left edge.
+ * Install's order and the dense packing (Links beside Requires at ≤ 599px) draw the facts out of DOM order,
+ * so focus follows the drawn grid, row by row. Where reading-flow isn't supported, focus keeps the DOM order.
+ */
+@media (max-width: 899px) {
+  .facts {
+    margin-top: 28px;
+  }
+
+  .fact-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: 22px 24px;
+    reading-flow: grid-rows;
+  }
+
+  .install {
+    grid-column: 1 / -1;
+    order: 1;
+  }
+}
+
+@media (max-width: 599px) {
+  .fact-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wide-phone {
+    grid-column: 1 / -1;
+  }
+}
+</style>

@@ -53,10 +53,12 @@ Every page:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#14120e">
+<title>{title}</title>
+<meta name="description" content="{description}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="canonical" href="https://lab.variable.land{path}">
-<meta property="og:site_name" content="Variable Land">
+<meta property="og:site_name" content="Variable Lab">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lab.variable.land{path}">
 <meta property="og:title" content="{title}">
@@ -156,8 +158,11 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
   3. The Install command, which moves after the other facts and spans the full width.
   4. The Example, 12px below the Install command. Both share the same left edge.
   5. The Closing line and Also indexed.
-- **Install command width:** at most 50% of the width at 600–899px, and the full width at ≤ 599px.
-- **Published as:** at ≤ 599px it spans both columns when one column is too narrow for it. In the canvas that happens for the two Apps and theme-toggle.
+- **Focus order in one column:** focus moves through the facts as they are drawn, row by row (`reading-flow: grid-rows`), so the Install command comes last. Where `reading-flow` isn't supported, the DOM order stands: Install first.
+- **Install command width:** half the width at 600–899px, growing past half only as far as its Command needs to fit one line (theme-toggle's, near 600px), and the full width at ≤ 599px.
+- **Published as:** at ≤ 599px it spans both columns for an App, always, and for a Library whose Package is wider than one column at the phone width, 390px. In the canvas that happens for the two Apps and theme-toggle.
+- **Package:** whole wherever it fits; an App's line wraps after the separator, with the Package whole on the next line. Only when its column is narrower than it does it break, after its scope (`@variablelab/`, then `theme-toggle`), never at a hyphen and never past its column: theme-toggle's does at 600–651px. Its link's accessible name stays exactly the Package.
+- **Runs on:** its last two Runtimes and the separator between them stay on one line, so the list never ends on a single Runtime, as env's would at 351px.
 
 | Element | Type | Color | Size and space |
 | --- | --- | --- | --- |
@@ -168,7 +173,7 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
 | Body | `body`, pretty | `ink-muted` | `margin-top: 16px`, `max-width: 58ch` |
 | Facts | | | A column, `gap: 22px` |
 | Fact label (`Install`, `Requires`, `Runs on`, `Published as`, `Links`) | `label` | `dim` | 6px above its value, 8px for `Install` |
-| Requires, Runs on | `small` | `ink` | |
+| Requires, Runs on | `small`, pretty | `ink` | |
 | Published as | `meta` | `dim`, an App's Executable `ink`, a Library's Package `ink`; the Package is an underlined link at a 3px offset | |
 | Links | `small`, each an underlined link at a 3px offset | `dim`; underline `dim` on hover | A column, `gap: 4px` |
 | Install command box | `label` at line height 1.5, the Command colored by token ([content-model.md](content-model.md#command)), one line | `surface` background, 1px `rule` border, `rule-strong` on hover | `min-height: 44px`, `padding: 10px 12px`, full width of its column, the Command on the left and the icon on the right, 10px apart |
@@ -222,7 +227,7 @@ Every `og:image` has the same frame:
 
 - **Middle:**
   - The Sign at 72px, 24px from the name, shifted 6px left so its edge lines up with the text.
-  - The name at 84px / 1, 500, `-0.04em`. If it doesn't fit the column, it shrinks until it does: `theme-toggle` is 62px.
+  - The name at 84px / 1, 500, `-0.04em`. If it doesn't fit the column, it shrinks to the largest whole size that does: `theme-toggle` is 71px.
   - The Tagline at 34px / 1.22, `-0.02em`, `max-width: 20ch`, balance, 28px below.
 - **Panel**, in mono, as three rows:
   1. **Install command:** `padding: 24px 28px`, 21px, a 1px `rule` below. A `$ ` prompt in `gutter` comes first, then the Command colored by token.
@@ -231,16 +236,16 @@ Every `og:image` has the same frame:
      - A File snippet has `padding: 22px 0` and line numbers 30px wide, right-aligned, in `gutter`, 24px before the code.
      - A Terminal snippet has `padding: 22px 28px` and no line numbers. Its comments are in `comment`, each Command gets a `$ ` prompt, and the line between groups is a blank 34px.
 
-## Open decisions
+## Decisions
 
-Left to whoever implements the site.
+What this file left to the implementation, and what was chosen.
 
-- How the pages are rendered and with what.
-- Where the content lives ([content-model.md](content-model.md) is its schema).
-- How each `og:image` is generated and cached.
-- How the tokens, fonts and shapes reach the pages. `@variablelab/brand` publishes the tokens as CSS and JSON, the Logo and the Class stamps. The `vlab-brand` skill says where the IBM Plex files come from and which format each medium needs.
-- How code gets colored, as long as the result follows the syntax palette in the skill's `color.md`.
-- Exporting `favicon.svg` and `apple-touch-icon.png` from the Logo.
+- **Rendering:** Astro 7, static output, with no adapter and no UI framework. `build.format: 'file'` and `trailingSlash: 'never'` build each page to `/<page>.html`. The Worker has no script: it serves `dist/` as static assets with `html_handling: "drop-trailing-slash"`, so `/<project>/` and `/<project>.html` redirect to `/<project>`, and `/<project>` never redirects. Copy is a small inline script. Each page carries its stylesheet inline and preloads its three fonts, and `public/_headers` lets browsers keep every file under `/_astro/` for a year, since the build names those files by their content: moving between pages waits for no stylesheet and no font.
+- **Content:** Astro content collections, defined in `src/content.config.ts` with Zod from `astro/zod`. Each Project is a YAML file in `src/content/projects/`, and the Index with its Keeper is `src/content/index.yaml`. The schema enforces the rules of [content-model.md](content-model.md), and `src/lib/content.ts` computes the derived fields. The fixed words this file names (the fact labels, `Also indexed`, the Class headings, `Copy:`, `Copied`, `About {name}`, and `Variable Land` in the Signature) live in `src/lib/labels.ts`.
+- **`og:image`:** the static endpoints `src/pages/og.png.ts` and `src/pages/og/[project].png.ts` draw each image from the content with satori and rasterize it with sharp at build time. Cloudflare serves them as static assets, so an image changes only when a build changes it.
+- **Tokens, fonts and shapes:** `src/styles/site.css` imports `@variablelab/brand/tokens.css` and Fontsource's latin CSS for IBM Plex Sans 400 and 500 and Mono 400, so browsers load woff2. The `og:image`s read Fontsource's woff files. `src/lib/brand.ts` reads `tokens.json`, the Logo and the Class stamps from `@variablelab/brand` at build time.
+- **Code coloring** (`src/lib/code.ts`): a Command by the shell rule of the skill's `color.md`. Its first token is `function`, a flag is `text` and every other token is `string`. A File snippet is colored by Shiki, with a theme built from Vesper's own scope rules: each Vesper color becomes the role that has it in `tokens.json`. The pages and the `og:image`s share the same tokens.
+- **Icons:** `/favicon.svg` serves `assets/logo.svg` unchanged, and sharp renders `/apple-touch-icon.png` from it.
 
 ## External dependency
 

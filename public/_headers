@@ -1,0 +1,4 @@
+# The build names each file under /_astro/ by its content, so a changed file gets a new URL:
+# browsers keep these for a year and never revalidate them.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

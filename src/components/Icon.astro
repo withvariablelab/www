@@ -1,0 +1,35 @@
+---
+// A UI icon, with the geometry and stroke rules of the skill's iconography.md: 16×16, shown at 14px,
+// outlined in currentColor, aria-hidden. The control that holds it carries the accessible name.
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"svg"> {
+  /** Copy copies a Command; Copied replaces it for a moment after a copy. */
+  name: "copy" | "copied";
+}
+
+const { name, class: className, ...attributes } = Astro.props;
+---
+
+<svg
+  class:list={["icon", className]}
+  width="14"
+  height="14"
+  viewBox="0 0 16 16"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="square"
+  stroke-linejoin="miter"
+  aria-hidden="true"
+  {...attributes}
+>
+  {name === "copy" ? (
+    <>
+      <rect x="5.75" y="5.75" width="8.5" height="8.5"></rect>
+      <path d="M2.75 10.25V2.75h7.5"></path>
+    </>
+  ) : (
+    <path d="M3 8.5l3.25 3.25L13 5"></path>
+  )}
+</svg>

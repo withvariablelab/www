@@ -1,0 +1,7 @@
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        # First-party withvariablelab/gh-actions is tracked at @main on purpose.
+        "withvariablelab/*": ref-pin
+        "*": hash-pin
