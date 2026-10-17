@@ -63,16 +63,6 @@ function grammar(file: string): BundledLanguage {
   return language;
 }
 
-// Where the canvas departs from Vesper. Every other scope follows Vesper's own rules.
-const canvasRoles: { scope: string[]; role: SyntaxRole }[] = [
-  // The * of `import * as`, which Vesper leaves in its default color.
-  { scope: ["constant.language.import-export-all"], role: "keyword" },
-  // = between an HTML attribute and its value, which Vesper leaves in its default color.
-  { scope: ["punctuation.separator.key-value.html"], role: "keyword" },
-  // JSX's { and }, which Vesper colors like a tag's < and >.
-  { scope: ["punctuation.section.embedded.begin.tsx", "punctuation.section.embedded.end.tsx"], role: "text" },
-];
-
 /**
  * The theme, as the skill's color.md sets it: Vesper's scope rules, each Vesper color swapped for the role that has
  * it in tokens.json. Any other Vesper color, its third accent (#FF8080) included, is `text`.
@@ -89,11 +79,7 @@ async function loadTheme(): Promise<ThemeRegistration> {
     type: "dark",
     fg: syntaxColors.text,
     bg: colors.surface,
-    settings: [
-      { settings: { foreground: syntaxColors.text } },
-      ...rules,
-      ...canvasRoles.map(({ scope, role }) => ({ scope, settings: { foreground: syntaxColors[role] } })),
-    ],
+    settings: [{ settings: { foreground: syntaxColors.text } }, ...rules],
   };
 }
 
