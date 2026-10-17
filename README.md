@@ -1,23 +1,38 @@
 # www
 
-Root Worker for [lab.variable.land](https://lab.variable.land), the home of Variable Lab's open source projects.
+The site at [lab.variable.land](https://lab.variable.land): the Index of Variable Lab's apps and libraries, and a page for each one.
 
-Until the landing page exists, it serves `/robots.txt` and redirects everything else (302) to [github.com/withvariablelab](https://github.com/withvariablelab).
+Until the Index is built, it serves `/robots.txt` and redirects everything else (302) to [github.com/withvariablelab](https://github.com/withvariablelab). The site is designed and specified in [docs/](./docs):
 
-## Adding a project
+| Doc | What it holds |
+| --- | --- |
+| [design.md](./docs/design.md) | The pages, their head and `og:image`, the rules they render by, and every measurement. |
+| [content-model.md](./docs/content-model.md) | The entities and fields behind the pages. |
+| [content.md](./docs/content.md) | The approved content: the Index and each Project. |
+| [glossary.md](./docs/glossary.md) | The terms used in code, content and copy. |
+| [add-a-project.md](./docs/add-a-project.md) | How a Project gets into the Index. |
 
-Each project lives at `lab.variable.land/<project>` and deploys its own Worker with its own routes. This repo doesn't change. In the project's `wrangler.jsonc`:
+The brand comes from [withvariablelab/brand](https://github.com/withvariablelab/brand).
+
+## How `lab.variable.land` is split
+
+This Worker owns `lab.variable.land` as a [Custom Domain](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/), which also creates the DNS record. It serves the Index, every Project page at `/<project>`, and the `og:image`s at `/og.png` and `/og/<project>.png`.
+
+A Project that publishes its own docs deploys its own Worker, with a route for everything under `/<project>/`. Routes on the same hostname [take precedence](https://developers.cloudflare.com/workers/configuration/routing/routes/), so those paths never reach this Worker. In the Project's `wrangler.jsonc`:
 
 ```jsonc
 "routes": [
-  { "pattern": "lab.variable.land/<project>", "zone_name": "variable.land" },
   { "pattern": "lab.variable.land/<project>/*", "zone_name": "variable.land" }
 ]
 ```
 
-This Worker owns `lab.variable.land` as a [Custom Domain](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/), which also creates the DNS record. Routes on the same hostname [take precedence](https://developers.cloudflare.com/workers/configuration/routing/routes/), so project paths never reach this Worker.
+The pattern ends in `/*`, so `/<project>` itself, the Project page, still reaches this Worker. `lab.variable.land/<project>*` would take it too.
 
-The only shared piece is `/robots.txt`, which lives here because it must sit at the root. Edit `src/index.ts` only if a project needs its own crawl rules or sitemap listed there.
+`/robots.txt` lives here because it must sit at the root. It also lists the sitemaps of the Projects' docs.
+
+## Adding a Project
+
+Follow [docs/add-a-project.md](./docs/add-a-project.md).
 
 ## Deploying
 
@@ -31,9 +46,9 @@ Deployed with [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/b
 
 `previews: {}` in `wrangler.jsonc` is required for the preview command.
 
-Set these before the first push: each branch copies the build settings into its own preview trigger the first time it's pushed, so later changes only apply to new branches.
+Each branch copies these settings into its own preview trigger the first time it's pushed. A change to them applies only to branches pushed after it.
 
-Local development:
+## Local development
 
 ```sh
 pnpm install
