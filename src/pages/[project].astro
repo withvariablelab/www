@@ -33,6 +33,11 @@ const runtimes = project.runtimes && new Intl.ListFormat("en", { type: "unit" })
 const phoneColumn = (390 - 2 * 16 - 24) / 2;
 const metaAdvance = 0.6 * 12;
 const publishedAsWide = publishedAs.executable !== undefined || [...publishedAs.package].length * metaAdvance > phoneColumn;
+
+// A scoped Package, such as @variablelab/theme-toggle, splits after its scope: the one place it may break.
+const scopeLength = publishedAs.package.startsWith("@") ? publishedAs.package.indexOf("/") + 1 : 0;
+const packageScope = publishedAs.package.slice(0, scopeLength);
+const packageName = publishedAs.package.slice(scopeLength);
 ---
 
 <Layout page={project}>
@@ -54,7 +59,7 @@ const publishedAsWide = publishedAs.executable !== undefined || [...publishedAs.
       {project.requirement !== undefined && (
         <div class="fact">
           <dt class="type-label">{factLabels.requires}</dt>
-          <dd class="type-small">
+          <dd class="type-small pretty">
             <Text text={project.requirement} />
           </dd>
         </div>
@@ -62,7 +67,7 @@ const publishedAsWide = publishedAs.executable !== undefined || [...publishedAs.
       {runtimes !== undefined && (
         <div class="fact">
           <dt class="type-label">{factLabels.runsOn}</dt>
-          <dd class="type-small">
+          <dd class="type-small pretty">
             <Text text={runtimes} />
           </dd>
         </div>
@@ -75,7 +80,16 @@ const publishedAsWide = publishedAs.executable !== undefined || [...publishedAs.
               <span class="executable">{publishedAs.executable}</span>
               {separator}
             </>
-          )}<a class="link-underlined" href={project.npm}>{publishedAs.package}</a>
+          )}<span class="package"
+            ><a class="link-underlined" href={project.npm} aria-label={publishedAs.package}
+              >{packageScope !== "" && (
+                <>
+                  <span class="term">{packageScope}</span>
+                  <wbr />
+                </>
+              )}<span class="term">{packageName}</span></a
+            ></span
+          >
         </dd>
       </div>
       <div class="fact">
@@ -221,17 +235,21 @@ dd {
   color: var(--vlab-ink);
 }
 
-/* The Package is an inline link, as the canvas draws it, and stays whole: an App's line wraps after the separator. */
-.published-as a {
-  white-space: nowrap;
+/*
+ * The Package is one inline block, so it stays whole wherever it fits: an App's line wraps after the separator and
+ * the Package moves down whole. Only when its column is narrower than the Package does it break, after its scope (the
+ * <wbr>), never inside the scope or the name: theme-toggle's at 600–651px. The link inside stays inline, so its
+ * underline and focus ring hug the text, and its aria-label keeps its accessible name exactly the Package, which
+ * Chrome would otherwise split with a space at the <wbr>.
+ */
+.package {
+  display: inline-block;
 }
 
-/* The canvas sets Links at 14px with the page's line height. */
 .links {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  line-height: 1.45;
   color: var(--vlab-dim);
 }
 
@@ -243,11 +261,10 @@ dd {
   text-decoration-color: var(--vlab-dim);
 }
 
-/* The Closing line, at 14px with the page's line height, as the canvas sets it. */
+/* The Closing line */
 
 .closing {
   margin: 28px 0 0;
-  line-height: 1.45;
   color: var(--vlab-dim);
 }
 
@@ -264,7 +281,7 @@ dd {
   color: var(--vlab-dim);
 }
 
-/* Items at 14px with the page's line height, as the canvas sets them; each Sign 10px from its name. */
+/* Items wrap; each Sign 10px from its name. */
 .also-list {
   display: flex;
   flex-wrap: wrap;
@@ -272,7 +289,6 @@ dd {
   margin: 0;
   padding: 0;
   list-style: none;
-  line-height: 1.45;
 }
 
 .also-list a {
@@ -284,6 +300,8 @@ dd {
 /*
  * One column: the facts below the lead, as a grid of 3 columns, then 2 at ≤ 599px. The Install command
  * moves after the other facts and takes the full row, so the Example follows it at the same left edge.
+ * Install's order and the dense packing (Links beside Requires at ≤ 599px) draw the facts out of DOM order,
+ * so focus follows the drawn grid, row by row. Where reading-flow isn't supported, focus keeps the DOM order.
  */
 @media (max-width: 899px) {
   .facts {
@@ -295,6 +313,7 @@ dd {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-auto-flow: dense;
     gap: 22px 24px;
+    reading-flow: grid-rows;
   }
 
   .install {

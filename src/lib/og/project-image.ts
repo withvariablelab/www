@@ -10,6 +10,10 @@ const rule = `1px solid ${colors.rule}`;
 
 const sign = { size: 72, shift: 6, gap: 24 };
 const nameStyle = { fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1 };
+/**
+ * The name's largest size. Every name is set at the largest whole size up to it that fits `nameRoom` on one line
+ * (`fitFontSize`), so a long name's size comes from fitting the column: no name has a size of its own.
+ */
 const nameSize = 84;
 /** The room beside the Sign: the column less the Sign, which is shifted left, and the gap. */
 const nameRoom = columnWidth - (sign.size - sign.shift) - sign.gap;

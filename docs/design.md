@@ -156,8 +156,10 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
   3. The Install command, which moves after the other facts and spans the full width.
   4. The Example, 12px below the Install command. Both share the same left edge.
   5. The Closing line and Also indexed.
+- **Focus order in one column:** focus moves through the facts as they are drawn, row by row (`reading-flow: grid-rows`), so the Install command comes last. Where `reading-flow` isn't supported, the DOM order stands: Install first.
 - **Install command width:** at most 50% of the width at 600–899px, and the full width at ≤ 599px.
 - **Published as:** at ≤ 599px it spans both columns when one column is too narrow for it. In the canvas that happens for the two Apps and theme-toggle.
+- **Package:** whole wherever it fits; an App's line wraps after the separator, with the Package whole on the next line. Only when its column is narrower than it does it break, after its scope (`@variablelab/`, then `theme-toggle`), never at a hyphen and never past its column: theme-toggle's does at 600–651px. Its link's accessible name stays exactly the Package.
 
 | Element | Type | Color | Size and space |
 | --- | --- | --- | --- |
@@ -168,7 +170,7 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
 | Body | `body`, pretty | `ink-muted` | `margin-top: 16px`, `max-width: 58ch` |
 | Facts | | | A column, `gap: 22px` |
 | Fact label (`Install`, `Requires`, `Runs on`, `Published as`, `Links`) | `label` | `dim` | 6px above its value, 8px for `Install` |
-| Requires, Runs on | `small` | `ink` | |
+| Requires, Runs on | `small`, pretty | `ink` | |
 | Published as | `meta` | `dim`, an App's Executable `ink`, a Library's Package `ink`; the Package is an underlined link at a 3px offset | |
 | Links | `small`, each an underlined link at a 3px offset | `dim`; underline `dim` on hover | A column, `gap: 4px` |
 | Install command box | `label` at line height 1.5, the Command colored by token ([content-model.md](content-model.md#command)), one line | `surface` background, 1px `rule` border, `rule-strong` on hover | `min-height: 44px`, `padding: 10px 12px`, full width of its column, the Command on the left and the icon on the right, 10px apart |
@@ -222,7 +224,7 @@ Every `og:image` has the same frame:
 
 - **Middle:**
   - The Sign at 72px, 24px from the name, shifted 6px left so its edge lines up with the text.
-  - The name at 84px / 1, 500, `-0.04em`. If it doesn't fit the column, it shrinks until it does: `theme-toggle` is 62px.
+  - The name at 84px / 1, 500, `-0.04em`. If it doesn't fit the column, it shrinks to the largest whole size that does: `theme-toggle` is 71px.
   - The Tagline at 34px / 1.22, `-0.02em`, `max-width: 20ch`, balance, 28px below.
 - **Panel**, in mono, as three rows:
   1. **Install command:** `padding: 24px 28px`, 21px, a 1px `rule` below. A `$ ` prompt in `gutter` comes first, then the Command colored by token.
