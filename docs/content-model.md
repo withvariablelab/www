@@ -16,8 +16,8 @@ One. The page at `/`.
 | projects | stored | The Projects in order. The page groups them by Class, Apps first; within a Class they keep this order. A new Project goes last in its Class unless the Keeper places it. |
 | description | stored | The head description. |
 | address | derived | `lab.variable.land`. |
-| title | derived | `Variable Land`. |
-| ogAlt | derived | `Variable Land — {intro}`. |
+| title | derived | `Variable Lab`. |
+| ogAlt | derived | `Variable Lab — {intro}`. |
 
 ## Keeper
 
@@ -53,7 +53,7 @@ One per Project in the Index. Every Project has a Project page at `lab.variable.
 | description | stored | The head description, at most 160 characters. | The Tagline plus one sentence of the Body. |
 | npm | derived | `https://www.npmjs.com/package/{package}`. | |
 | address | derived | `lab.variable.land/{name}`. | |
-| title | derived | `{name} · Variable Land`. | |
+| title | derived | `{name} · Variable Lab`. | |
 | ogAlt | derived | `{name} — {tagline}`. | |
 | publishedAs | derived | A Library shows `{package}`; an App shows `{executable} · {package}`. | |
 | alsoIndexed | derived | Up to three other Projects: first those of the same Class, then the other Class, each group in Index order. | |

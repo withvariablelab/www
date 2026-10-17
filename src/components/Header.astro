@@ -2,7 +2,7 @@
 // The header of every page (docs/design.md#frame): the page's Address, and the Signature,
 // which links to the Index from every other page.
 import { logoSvg } from "../lib/brand.ts";
-import { indexPath, siteName } from "../lib/content.ts";
+import { indexPath, signatureName } from "../lib/content.ts";
 import Text from "./Text.astro";
 
 interface Props {
@@ -29,7 +29,7 @@ const addressParts = address.split(/(?<=\/)/);
     ))}</span
   >
   <Signature class="signature type-ui" href={Signature === "a" ? indexPath : undefined}>
-    <Fragment set:html={logo} />{siteName}
+    <Fragment set:html={logo} />{signatureName}
   </Signature>
 </header>
 

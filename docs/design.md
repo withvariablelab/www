@@ -56,7 +56,7 @@ Every page:
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="canonical" href="https://lab.variable.land{path}">
-<meta property="og:site_name" content="Variable Land">
+<meta property="og:site_name" content="Variable Lab">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lab.variable.land{path}">
 <meta property="og:title" content="{title}">

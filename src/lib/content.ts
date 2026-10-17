@@ -70,8 +70,10 @@ export interface Index extends Omit<StoredIndex, "projects"> {
 }
 
 const address = "lab.variable.land";
-/** The Index's title: the name in the Signature, and every page's og:site_name. */
-export const siteName = "Variable Land";
+/** The site's name: the Index's title, the end of every Project's title, and every page's og:site_name. */
+export const siteName = "Variable Lab";
+/** The name set beside the Logo in the Signature: the house, Variable Land (the vlab-brand skill's logo.md). */
+export const signatureName = "Variable Land";
 /** The Index's path. The Signature links here from every other page. */
 export const indexPath = "/";
 export const separator = " · ";

@@ -8,7 +8,7 @@ import { createRequire } from "node:module";
 import satori, { type Font } from "satori";
 import sharp from "sharp";
 import { colors, fonts, logoSvg } from "../brand.ts";
-import { siteName } from "../content.ts";
+import { signatureName } from "../content.ts";
 
 /** CSS declarations in satori's camelCase form, numbers in px. */
 export type Style = Record<string, string | number>;
@@ -149,7 +149,7 @@ function frame({ address, middle, panel }: FrameContent): Element {
       letterSpacing: "-0.02em",
     },
     svgImage(logoSvg({ width: 34, height: 40 }), 34, 40),
-    siteName,
+    signatureName,
   );
   const column = el(
     "div",
