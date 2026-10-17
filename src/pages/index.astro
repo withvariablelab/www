@@ -1,12 +1,211 @@
 ---
-// TEMPORARY: the page lands in the next step. Until then, the frame alone: the Index's head and header
-// (the Signature is not a link) and an empty main area.
+// The Index (docs/design.md#index): the house's sentence and the Unpublished line, the Keeper's column,
+// then the Projects by Class, Apps first. On desktop the Keeper sits in the side column, sticky, beside
+// the intro and the sections; in one column it falls between them.
+import Shape from "../components/Shape.astro";
+import Text from "../components/Text.astro";
 import Layout from "../layouts/Layout.astro";
-import { getIndex } from "../lib/content.ts";
+import { getIndex, type PublishedAs } from "../lib/content.ts";
+import { classHeadings } from "../lib/labels.ts";
 
 const index = await getIndex();
+const { keeper } = index;
+
+/** "Published as" after the Executable, which is set apart in ink: an App's ` · {package}`, a Library's whole line. */
+const afterExecutable = ({ executable, text }: PublishedAs): string =>
+  executable === undefined ? text : text.slice(executable.length);
 ---
 
 <Layout page={index}>
-  <main class="column-main"></main>
+  <div class="column-main intro">
+    <h1 class="title type-title balance"><Text text={index.intro} /></h1>
+    <p class="unpublished pretty"><Text text={index.unpublishedLine} /></p>
+  </div>
+
+  <aside class="column-side keeper">
+    <p class="keeper-name">{keeper.name}</p>
+    <p class="keeper-site keeper-link type-small"><a class="link-underlined" href={keeper.site.url}>{keeper.site.name}</a></p>
+    <p class="statement type-small pretty"><Text text={keeper.statement} /></p>
+    <p class="keeper-github keeper-link type-small">
+      <a class="link-underlined" href={keeper.github.url}>{keeper.github.name}</a>
+    </p>
+  </aside>
+
+  <main class="column-main sections">
+    {index.byClass.map((group) => (
+      <section>
+        <h2 class="class-heading type-ui">
+          <Shape projectClass={group.class} size={16} />
+          {classHeadings[group.class]}
+        </h2>
+        <ul class="projects">
+          {group.projects.map((project) => (
+            <li class="project">
+              <Shape project={project} size={28} />
+              <div>
+                <h3 class="name type-heading">
+                  <a class="link-underlined" href={project.path}>
+                    <Text text={project.name} />
+                  </a>
+                </h3>
+                <p class="tagline pretty">
+                  <Text text={project.tagline} />
+                </p>
+                <span class="published-as type-meta">
+                  <a class="link-underlined" href={project.repository}>
+                    {project.publishedAs.executable !== undefined && (
+                      <span class="executable">{project.publishedAs.executable}</span>
+                    )}
+                    <Text text={afterExecutable(project.publishedAs)} />
+                  </a>
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </main>
 </Layout>
+
+<style>
+/* Rows on desktop, through the frame's --row: the intro, then the sections; the Keeper spans both. */
+
+.intro {
+  --row: 2;
+  padding: 36px 0 12px;
+}
+
+.title {
+  margin: 0;
+  max-width: 24ch;
+}
+
+.unpublished {
+  margin: 10px 0 0;
+  max-width: 42ch;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--vlab-dim);
+}
+
+/* The Keeper's column. Its sticky position and desktop padding-top come from the frame's .column-side. */
+
+.keeper {
+  --row: 2 / span 2;
+}
+
+.keeper-name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+/* The canvas sets the site and GitHub at 14px with the page's line height, not small's 1.5. */
+.keeper-link {
+  line-height: 1.45;
+  color: var(--vlab-dim);
+}
+
+.keeper-site {
+  margin: 6px 0 0;
+}
+
+.statement {
+  margin: 14px 0 0;
+  max-width: 52ch;
+  color: var(--vlab-ink);
+}
+
+.keeper-github {
+  margin: 16px 0 0;
+}
+
+.keeper-link a,
+.published-as a {
+  text-underline-offset: 3px;
+}
+
+.keeper-link a:hover,
+.published-as a:hover {
+  text-decoration-color: var(--vlab-dim);
+}
+
+/* The sections, below the intro. A Class: its heading with its Class stamp, then its Projects. */
+
+.sections {
+  --row: 3;
+}
+
+.class-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 28px 0 0;
+  padding-bottom: 14px;
+  font-weight: 500;
+  letter-spacing: -0.011em;
+  color: var(--vlab-ink);
+}
+
+.projects {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.project {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  column-gap: 20px;
+  align-items: start;
+  padding: 26px 0;
+  border-top: 1px solid var(--vlab-rule);
+}
+
+.name {
+  margin: 0;
+}
+
+.name a {
+  text-underline-offset: 5px;
+}
+
+.name a:hover {
+  text-decoration-color: var(--vlab-ink);
+}
+
+.tagline {
+  margin: 6px 0 0;
+  max-width: 42ch;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.published-as {
+  display: block;
+  margin-top: 8px;
+  color: var(--vlab-dim);
+}
+
+.executable {
+  color: var(--vlab-ink);
+}
+
+/* One column: header, intro, the Keeper between two rules, then the sections. */
+
+@media (max-width: 899px) {
+  .title,
+  .unpublished {
+    max-width: none;
+  }
+
+  .keeper {
+    margin-top: 24px;
+    padding: 16px 0;
+    border-top: 1px solid var(--vlab-rule);
+    border-bottom: 1px solid var(--vlab-rule);
+  }
+}
+</style>
