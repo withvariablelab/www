@@ -23,8 +23,12 @@ interface Props {
 const { project } = Astro.props;
 const { publishedAs } = project;
 
-// Runs on lists the Runtimes as English does, in a comma-separated list.
-const runtimes = project.runtimes && new Intl.ListFormat("en", { type: "unit" }).format(project.runtimes);
+// Runs on lists the Runtimes as English does, in a comma-separated list. Its last two Runtimes and the separator
+// between them (the list's last three parts) stay on one line, in a `term`, so the list never ends on a single
+// Runtime, which text-wrap pretty alone allows: env's would end on Edge at 351px.
+const runtimeParts = project.runtimes && new Intl.ListFormat("en", { type: "unit" }).formatToParts(project.runtimes);
+const joinParts = (parts: { value: string }[]) => parts.map((part) => part.value).join("");
+const runtimes = runtimeParts && { head: joinParts(runtimeParts.slice(0, -3)), last: joinParts(runtimeParts.slice(-3)) };
 
 // At ≤ 599px the facts are two columns, and Published as takes the full row when one column is too narrow
 // for it: a Package wider than a column at the canvas's phone width (390px, so (390 − 2 × 16 − 24) / 2 =
@@ -68,7 +72,10 @@ const packageName = publishedAs.package.slice(scopeLength);
         <div class="fact">
           <dt class="type-label">{factLabels.runsOn}</dt>
           <dd class="type-small pretty">
-            <Text text={runtimes} />
+            <Text text={runtimes.head} />
+            <span class="term">
+              <Text text={runtimes.last} />
+            </span>
           </dd>
         </div>
       )}

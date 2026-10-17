@@ -160,6 +160,7 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
 - **Install command width:** at most 50% of the width at 600–899px, and the full width at ≤ 599px.
 - **Published as:** at ≤ 599px it spans both columns when one column is too narrow for it. In the canvas that happens for the two Apps and theme-toggle.
 - **Package:** whole wherever it fits; an App's line wraps after the separator, with the Package whole on the next line. Only when its column is narrower than it does it break, after its scope (`@variablelab/`, then `theme-toggle`), never at a hyphen and never past its column: theme-toggle's does at 600–651px. Its link's accessible name stays exactly the Package.
+- **Runs on:** its last two Runtimes and the separator between them stay on one line, so the list never ends on a single Runtime, as env's would at 351px.
 
 | Element | Type | Color | Size and space |
 | --- | --- | --- | --- |

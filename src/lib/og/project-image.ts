@@ -19,6 +19,23 @@ const nameSize = 84;
 const nameRoom = columnWidth - (sign.size - sign.shift) - sign.gap;
 const codeLineHeight = 34;
 
+/**
+ * The Sign row: the Sign and the name, each centered on the taller one as the canvas draws them. Where their heights
+ * differ by an odd number (theme-toggle's 71px name beside the 72px Sign), centering puts the shorter one on a half
+ * pixel: the canvas draws it on the pixel above, and satori's layout would round it to the one below. So each is set
+ * at the top with a whole-pixel inset, rounded down as the canvas draws it.
+ */
+function signRow(signPath: string, name: string, nameFontSize: number): Child {
+  const height = Math.max(sign.size, nameFontSize);
+  const inset = (size: number) => Math.floor((height - size) / 2);
+  return el(
+    "div",
+    { display: "flex", alignItems: "flex-start", gap: sign.gap },
+    shape(signPath, sign.size, { marginLeft: -sign.shift, marginTop: inset(sign.size) }),
+    el("div", { ...nameStyle, fontSize: nameFontSize, marginTop: inset(nameFontSize), whiteSpace: "nowrap" }, name),
+  );
+}
+
 const tokens = (line: Token[]): Child[] => line.map(({ text, role }) => el("span", { color: syntaxColors[role] }, text));
 
 const gutter = (text: string): Child => el("span", { color: syntaxColors.gutter }, text);
@@ -58,12 +75,7 @@ export async function projectImage(project: Project): Promise<Response> {
     middle: el(
       "div",
       { display: "flex", flexDirection: "column" },
-      el(
-        "div",
-        { display: "flex", alignItems: "center", gap: sign.gap },
-        shape(shapePath(project), sign.size, { marginLeft: -sign.shift }),
-        el("div", { ...nameStyle, fontSize: nameFontSize, whiteSpace: "nowrap" }, project.name),
-      ),
+      signRow(shapePath(project), project.name, nameFontSize),
       el(
         "div",
         { marginTop: 28, maxWidth: "20ch", fontSize: 34, letterSpacing: "-0.02em", lineHeight: 1.22, textWrap: "balance" },
