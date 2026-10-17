@@ -11,5 +11,7 @@
   // its Project page, is left here (env still claims /env: see docs/design.md#external-dependency).
   "routes": [{ "pattern": "lab.variable.land", "custom_domain": true }],
   // Workers Builds runs `npx wrangler preview` on non-production branches; it fails without this block.
-  "previews": {}
+  "previews": {},
+  // Gives each Preview a workers.dev URL; without it a Preview deployment has no URL to open.
+  "preview_urls": true
 }
