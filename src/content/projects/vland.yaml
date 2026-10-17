@@ -1,6 +1,6 @@
 name: "vland"
 class: "App"
-sign: "M2 2h8v6h6v8h6v6H2V2z"
+sign: "M2 2h8v8h4v4h8v8H2V2z"
 tagline: "Starts a project in Variable Land."
 body: "A library, a backend or a monorepo. Every template targets Node, uses pnpm and ships rr as the one entry point for lint, format, type-check and build."
 installCommand: "pnpm add -g @variablelab/vland"

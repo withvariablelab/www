@@ -57,7 +57,7 @@ pnpm rr pack
 | Field | Value |
 | --- | --- |
 | class | App |
-| sign | `M2 2h8v6h6v8h6v6H2V2z` |
+| sign | `M2 2h8v8h4v4h8v8H2V2z` |
 | tagline | `Starts a project in Variable Land.` |
 | body | `A library, a backend or a monorepo. Every template targets Node, uses pnpm and ships rr as the one entry point for lint, format, type-check and build.` |
 | installCommand | `pnpm add -g @variablelab/vland` |
@@ -87,7 +87,7 @@ vland init my-app -t backend --no-install --no-git
 | Field | Value |
 | --- | --- |
 | class | Library |
-| sign | `M2 2h20v20H2V2zm4 6h10v4H6V8z` |
+| sign | `M2 2h20v20H2V2zm4 8h12v4H6v-4z` |
 | tagline | `Only declared variables, checked at boot.` |
 | body | `One Standard Schema contract. Files and the environment, resolved at boot. If a value is missing or malformed, the process stops before your code reads it.` |
 | installCommand | `pnpm add @variablelab/env` |
