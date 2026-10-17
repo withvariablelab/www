@@ -1,6 +1,6 @@
 # Add a Project
 
-How a Project gets into the Index and gets its Project page. Each step ends when its check holds; the next step uses what the previous one left. Fields are those of [content-model.md](content-model.md), and the result is a new entry in [content.md](content.md).
+How a Project gets into the Index and gets its Project page. Each step ends when its check holds; the next step uses what the previous one left. Fields are those of [content-model.md](content-model.md), and the result is a new entry in [content.md](content.md), with the same stored fields in `src/content/projects/<name>.yaml`, which the site is built from.
 
 1. **It belongs.** It is Variable Lab's own, it is published, and it isn't a fork. Today portless (a fork) and gh-actions (not a Project) stay out, and nothing private gets in until it is published.
    Check: it has a published Package and a public Repository.
@@ -17,11 +17,11 @@ How a Project gets into the Index and gets its Project page. Each step ends when
    Check: the code is what the README documents or runs as is, and no line is longer than about 70 characters.
 6. **Its shape.** Until it has a Sign, it shows its Class stamp. A Sign is drawn by the `vlab-brand` skill's `project-brand.md`, and it lives in the Project's repository as `brand/sign.svg`.
    Check: the Sign passes the covered-names test, and its path is copied into `sign`.
-7. **Its place.** Its position in the Index's `projects`, by the rule in [content-model.md](content-model.md#index).
+7. **Its place.** Its position in the Index's `projects`, by the rule in [content-model.md](content-model.md#index), in [content.md](content.md) and in `src/content/index.yaml`.
    Check: every Project's Also indexed still follows rule 3 in [design.md](design.md#rules).
-8. **Its page and its `og:image`.** They come from its content: nothing is drawn by hand.
+8. **Its page and its `og:image`.** They come from its content: `astro build` renders both, and stops when the content breaks a rule that `src/content.config.ts` checks. Nothing is drawn by hand.
    Check: its title, description and `og:image` follow [design.md](design.md#head).
-9. **Its docs, if it publishes its own.** The Project's own Worker takes everything under `lab.variable.land/<project>/`, with the route `{ "pattern": "lab.variable.land/<project>/*", "zone_name": "variable.land" }`. The pattern ends in `/*`, so the Project page at `lab.variable.land/<project>` stays with www; `lab.variable.land/<project>*` would take it too. A landing the Project had before redirects to its Project page. www's `/robots.txt` lists the docs' sitemap, and any crawl rule they need, such as disallowing their API.
+9. **Its docs, if it publishes its own.** The Project's own Worker takes everything under `lab.variable.land/<project>/`, with the route `{ "pattern": "lab.variable.land/<project>/*", "zone_name": "variable.land" }`. The pattern ends in `/*`, so the Project page at `lab.variable.land/<project>` stays with www; `lab.variable.land/<project>*` would take it too. A landing the Project had before redirects to its Project page. www's `/robots.txt` (`public/robots.txt`) lists the docs' sitemap, and any crawl rule they need, such as disallowing their API.
    Check: `lab.variable.land/<project>` shows the Project page from www, a path under `lab.variable.land/<project>/` shows the Project's docs, and `/robots.txt` names that sitemap.
 10. **Its README.** The Project's README copies its Tagline, word for word.
     Check: the Tagline in the README matches `tagline`.

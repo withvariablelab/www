@@ -11,7 +11,7 @@ index:
     github:
       name: "GitHub"
       url: "https://github.com/withvariablelab"
-  # The Projects in order. The page groups them by Class, Apps first; within a Class they keep this order.
+  # The Projects in Index order: see docs/content-model.md#index.
   projects:
     - "run-run"
     - "vland"

@@ -65,7 +65,7 @@ function grammar(file: string): BundledLanguage {
 
 /**
  * The theme, as the skill's color.md sets it: Vesper's scope rules, each Vesper color swapped for the role that has
- * it in tokens.json. Any other Vesper color, its third accent (#FF8080) included, is `text`.
+ * it in tokens.json. Any other Vesper color, its third accent included, is `text`.
  */
 async function loadTheme(): Promise<ThemeRegistration> {
   const vesper = (await bundledThemes.vesper()).default;

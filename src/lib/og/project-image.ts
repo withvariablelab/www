@@ -1,6 +1,5 @@
 // A Project's og:image (docs/design.md#project-1): its Sign, name and Tagline in the middle, and in the panel its
-// Install command, its ogSnippet's name and that Snippet's code, colored with the syntax palette. The texts the canvas
-// sets at line-height `normal` get the line box Chrome draws for it, as px (see `normalLineHeight` in frame.ts).
+// Install command, its ogSnippet's name and that Snippet's code, colored with the syntax palette.
 import { colors, fonts, shapePath, syntaxColors } from "../brand.ts";
 import { type CodeLine, commandTokens, prompt, snippetLines, type Token } from "../code.ts";
 import type { Project } from "../content.ts";
@@ -10,20 +9,16 @@ const rule = `1px solid ${colors.rule}`;
 
 const sign = { size: 72, shift: 6, gap: 24 };
 const nameStyle = { fontWeight: 500, letterSpacing: "-0.04em", lineHeight: 1 };
-/**
- * The name's largest size. Every name is set at the largest whole size up to it that fits `nameRoom` on one line
- * (`fitFontSize`), so a long name's size comes from fitting the column: no name has a size of its own.
- */
+/** The name's largest size; `fitFontSize` sets each name at the largest whole size up to it that fits `nameRoom`. */
 const nameSize = 84;
 /** The room beside the Sign: the column less the Sign, which is shifted left, and the gap. */
 const nameRoom = columnWidth - (sign.size - sign.shift) - sign.gap;
 const codeLineHeight = 34;
 
 /**
- * The Sign row: the Sign and the name, each centered on the taller one as the canvas draws them. Where their heights
- * differ by an odd number (theme-toggle's 71px name beside the 72px Sign), centering puts the shorter one on a half
- * pixel: the canvas draws it on the pixel above, and satori's layout would round it to the one below. So each is set
- * at the top with a whole-pixel inset, rounded down as the canvas draws it.
+ * The Sign row: the Sign and the name, each centered on the taller one. Where their heights differ by an odd number,
+ * centering puts the shorter one on a half pixel, which satori's layout would round to the pixel below. So each is set
+ * at the top with a whole-pixel inset, rounded down: the shorter one sits on the pixel above.
  */
 function signRow(signPath: string, name: string, nameFontSize: number): Child {
   const height = Math.max(sign.size, nameFontSize);

@@ -1,6 +1,5 @@
 // The Index's og:image (docs/design.md#index-1): the intro in the middle, and a crop of the Index in the panel,
-// its Projects grouped by Class as on the page. The texts the canvas sets at line-height `normal` get the line box
-// Chrome draws for it, as px (see `normalLineHeight` in frame.ts).
+// its Projects grouped by Class as on the page.
 import { colors, fonts, shapePath, stampPaths } from "../brand.ts";
 import type { ClassGroup, Index, Project } from "../content.ts";
 import { classHeadings } from "../labels.ts";
@@ -24,7 +23,7 @@ const row = (project: Project): Child =>
       "div",
       { display: "flex", flexDirection: "column" },
       // The name's line box is 34.5px. satori rounds a text's box up to a whole pixel, which would drop each row half a
-      // pixel below the last; a plain box of that height rounds to the nearest pixel, as Chrome places the rows.
+      // pixel below the last; a plain box of that height rounds to the nearest pixel.
       el("div", { display: "flex", height: name.fontSize * name.lineHeight }, el("div", name, project.name)),
       el("div", { marginTop: 6, fontSize: 20, lineHeight: normalLineHeight.sans20 }, project.tagline),
       el(

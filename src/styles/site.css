@@ -1,7 +1,7 @@
 /*
  * The frame every page shares (docs/design.md#frame), imported once by src/layouts/Layout.astro.
  * Colors, font families and syntax colors only come from the brand's tokens: --vlab-*.
- * Breakpoints, as in the canvas: one column at (max-width: 899px), the phone padding at (max-width: 599px).
+ * Breakpoints, as in docs/design.md#frame: one column at (max-width: 899px), the phone padding at (max-width: 599px).
  */
 @import "@variablelab/brand/tokens.css";
 /* IBM Plex from Fontsource, unmodified: the latin subset of each weight the pages set. */

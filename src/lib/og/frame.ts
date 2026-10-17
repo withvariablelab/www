@@ -1,14 +1,12 @@
 /// <reference types="node" />
-// The frame every og:image shares (docs/design.md#ogimage), laid out with satori and rasterized with sharp at build
-// time: ground with padding 64px 72px; a 500px left column with the Signature at the top, the page's own content in
-// the middle and its Address at the bottom; and a surface panel at x 640, y 64 that runs off the right and bottom
-// edges, where whatever doesn't fit is cut, never wrapped. The fonts are Fontsource's .woff files, unmodified.
+// The frame every og:image shares (docs/design.md#ogimage), laid out with satori and rasterized
+// with sharp at build time.
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import satori, { type Font } from "satori";
 import sharp from "sharp";
 import { colors, fonts, logoSvg } from "../brand.ts";
-import { signatureName } from "../content.ts";
+import { signatureName } from "../labels.ts";
 
 /** CSS declarations in satori's camelCase form, numbers in px. */
 export type Style = Record<string, string | number>;
@@ -56,7 +54,8 @@ export const columnWidth = 500;
 
 const nodeRequire = createRequire(import.meta.url);
 
-// woff, as the skill's typography.md sets for server-rendered images. Every weight the artboards use: Sans 400 and 500, Mono 400.
+// Fontsource's woff files, unmodified, as the skill's typography.md sets for server-rendered images. Every weight the
+// images set: Sans 400 and 500, Mono 400.
 const fontFiles = [
   { stack: fonts.sans, weight: 400, file: "@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff" },
   { stack: fonts.sans, weight: 500, file: "@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff" },
@@ -79,10 +78,10 @@ const loadFonts = (): Promise<Font[]> => {
 };
 
 /**
- * The line box Chrome draws for `line-height: normal` in IBM Plex, at each size the canvas leaves at `normal`. These are
- * measured on the canvas, not computed: Chrome rounds the ascent and the descent separately, so 20px gives 25, not
- * 1.3em. satori's own `normal` is the unrounded 1.3em, a pixel off at most of these sizes, so these texts take their
- * line height from here and none is left at satori's `normal`.
+ * The line box a browser draws for `line-height: normal` in IBM Plex, at each size docs/design.md leaves at `normal`.
+ * The browser rounds the ascent and the descent separately, so 20px gives 25, not 1.3em. satori's own `normal` is the
+ * unrounded 1.3em, a pixel off at most of these sizes, so these texts take their line height from here and none is
+ * left at satori's `normal`.
  */
 export const normalLineHeight = {
   sans18: "23px",

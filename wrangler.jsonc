@@ -9,7 +9,7 @@
   "assets": { "directory": "./dist", "html_handling": "drop-trailing-slash" },
   // Owns the bare hostname (and creates its DNS record). A Project with its own docs claims
   // lab.variable.land/<project>/* with a more specific route; lab.variable.land/<project>,
-  // its Project page, is left here (env still claims /env: see docs/design.md#external-dependency).
+  // its Project page, is left here (see docs/design.md#external-dependency).
   "routes": [{ "pattern": "lab.variable.land", "custom_domain": true }],
   // Workers Builds runs `npx wrangler preview` on non-production branches; it fails without this block.
   "previews": {},

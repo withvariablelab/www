@@ -83,10 +83,7 @@ const { command } = Astro.props;
   display: block;
 }
 
-/*
- * At 600–899px the box is at most half the width, as the canvas draws it. It grows past half only when
- * the Command would not fit: theme-toggle's needs 274.4px, a little over half of the 536px column at 600px.
- */
+/* At 600–899px the box is half the width. It grows past half only when the Command would not fit. */
 @media (min-width: 600px) and (max-width: 899px) {
   .command {
     width: max-content;

@@ -15,7 +15,7 @@ export type ColorToken = keyof typeof tokens.color;
 /** A role of the syntax palette in the skill's color.md. */
 export type SyntaxRole = keyof typeof tokens.syntax;
 
-/** The palette's hex values, such as `colors.ground` (`#14120e`). Pages use the `--vlab-*` custom properties instead. */
+/** The palette's hex values, such as `colors.ground`. Pages use the `--vlab-*` custom properties instead. */
 export const colors: Record<ColorToken, string> = values(tokens.color);
 /** Each syntax role's hex value. Pages use the role classes of site.css instead; images map roles through this. */
 export const syntaxColors: Record<SyntaxRole, string> = values(tokens.syntax);
@@ -33,7 +33,7 @@ const logoViewBox = /^<svg\b[^>]*\bviewBox="0 0 ([\d.]+) ([\d.]+)"/.exec(logo);
 if (logoViewBox?.[1] === undefined || logoViewBox[2] === undefined) {
   throw new Error('@variablelab/brand/assets/logo.svg no longer starts with <svg viewBox="0 0 <width> <height>">.');
 }
-/** The Logo's own proportions, from its viewBox (402.02 × 468.12). Scale it to these, never stretch it. */
+/** The Logo's own proportions, from its viewBox. Scale it to these, never stretch it. */
 export const logoSize = { width: Number(logoViewBox[1]), height: Number(logoViewBox[2]) };
 
 const escapeAttribute = (value: string): string =>

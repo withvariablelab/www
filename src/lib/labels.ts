@@ -1,6 +1,9 @@
 // The fixed UI words docs/design.md defines, so no page template holds copy. Everything else a page says is content.
 import type { ProjectClass } from "./content.ts";
 
+/** The name set beside the Logo in the Signature: the house, Variable Land (the vlab-brand skill's logo.md). */
+export const signatureName = "Variable Land";
+
 /** The labels of a Project page's facts. */
 export const factLabels = {
   install: "Install",

@@ -15,10 +15,10 @@ The site is static. `astro build` renders the pages in `src/pages` and the conte
 ## Code
 
 - Stored content is in `src/content/`, typed and checked by `src/content.config.ts`. Derived fields are computed in `src/lib/content.ts`, never stored.
-- The fixed words that `docs/design.md` names (fact labels, Class headings, `Copy:`, `Copied`) are in `src/lib/labels.ts`. Page templates and the Copy script hold none.
-- Brand values (colors, fonts, the Logo, the Class stamps) come from `@variablelab/brand` through `src/lib/brand.ts`. Code gets its colors from `src/lib/code.ts`, which the Project page and the `og:image`s share.
+- The fixed words that `docs/design.md` names are in `src/lib/labels.ts`; [design.md](./docs/design.md#decisions) lists them.
+- Brand values come from `@variablelab/brand`, never typed by hand. CSS uses the `--vlab-*` custom properties of its `tokens.css`, which `src/styles/site.css` imports with Fontsource's IBM Plex. TypeScript (the Logo, the Class stamps, `theme-color` and the `og:image`s) reads them through `src/lib/brand.ts`. Code gets its colors from `src/lib/code.ts`, which the Project page and the `og:image`s share.
 - The tools run by name through mise's PATH; the commands are in [README.md](./README.md#local-development). In a non-interactive shell mise's hook may not run: use `mise exec -- <command>`.
-- To check a page against the canvas, serve `dist/` with `wrangler dev` after `astro build`. A stale `dist/` shows old output.
+- For the visual check in [design.md](./docs/design.md#verifying), serve the build as the Worker does: `astro build`, then `wrangler dev` ([README.md](./README.md#local-development)).
 
 ## Brand
 
@@ -31,5 +31,5 @@ The tokens, the Logo and the Class stamps ship in the `@variablelab/brand` packa
 - Work from this directory. Everything this repo needs is in it or behind a public URL.
 - A change that another repository needs, such as the routes of env's docs Worker, is flagged to the Keeper, not made from here.
 - Docs and public copy are in English, written for any harness: say "agents", not one tool's name, and keep install commands free of agent flags.
-- Copy lives in the content, never hardcoded in a page.
+- Copy lives in `src/content/` and `src/lib/labels.ts`, never in a page, component or script.
 - A page is done after the visual check in [design.md](./docs/design.md#verifying).

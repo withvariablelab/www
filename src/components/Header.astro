@@ -2,7 +2,8 @@
 // The header of every page (docs/design.md#frame): the page's Address, and the Signature,
 // which links to the Index from every other page.
 import { logoSvg } from "../lib/brand.ts";
-import { indexPath, signatureName } from "../lib/content.ts";
+import { indexPath } from "../lib/content.ts";
+import { signatureName } from "../lib/labels.ts";
 import Text from "./Text.astro";
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
 const { address, path } = Astro.props;
 const Signature = path === indexPath ? "span" : "a";
 const logo = logoSvg({ width: 16, height: 18, "aria-hidden": "true" });
-// Below the canvas's widths, the Address may wrap after a "/", never inside a term: lab.variable.land/ theme-toggle.
+// On narrow screens the Address may wrap after a "/", never inside a term.
 const addressParts = address.split(/(?<=\/)/);
 ---
 
