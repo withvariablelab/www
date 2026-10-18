@@ -27,7 +27,7 @@ Keeper:
 | class | App |
 | sign | `M2 2h12v8h8v12H10v-8H2V2z` |
 | tagline | `One way to run the scripts in a repo.` |
-| body | `Every tool is a plugin you add: Biome, oxc, tsc or tsdown. The commands stay the same in every repo.` |
+| body | `Every tool is a plugin you add. The commands stay the same in every repo.` |
 | installCommand | `pnpm add -D @rrlab/cli` |
 | executable | `rr` |
 | package | `@rrlab/cli` |
@@ -35,7 +35,7 @@ Keeper:
 | repository | `https://github.com/withvariablelab/dx/tree/main/run-run/cli` |
 | links | `CLI reference` → `https://github.com/withvariablelab/dx/blob/main/run-run/cli/CLI.md`; `GitHub` → the repository |
 | closingLine | `Ships no Biome or TypeScript. Each plugin installs its tool.` |
-| description | `One way to run the scripts in a repo. Every tool is a plugin you add: Biome, oxc, tsc or tsdown.` |
+| description | `One way to run the scripts in a repo. Every tool is a plugin you add.` |
 
 Example: one Terminal snippet.
 
