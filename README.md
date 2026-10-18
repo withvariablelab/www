@@ -38,21 +38,22 @@ Follow [docs/add-a-project.md](./docs/add-a-project.md).
 
 ## Deploying
 
-Deployed with [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) (Git integration) using these build settings:
+Deployed with [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) (Git integration). Its build settings, under the Worker's Settings → Build, have two sets: Production, for `main`, and Previews Base, for every other branch.
 
-| Setting | Value |
-| --- | --- |
-| Root directory | `/` |
-| Build command | `pnpm exec astro build` |
-| Build variable | `NODE_VERSION` = `24` |
-| Deploy command | `pnpm exec wrangler deploy` |
-| Non-production branch deploy command | `npx wrangler preview` |
+| Setting | Production | Previews Base |
+| --- | --- | --- |
+| Root directory | `/` | `/` |
+| Build command | `pnpm exec astro build` | `pnpm exec astro build` |
+| Build variable | `NODE_VERSION` = `24` | `NODE_VERSION` = `24` |
+| Deploy command | `pnpm exec wrangler deploy` | `npx wrangler preview` |
 
-- The Build command is set in the dashboard: `build.command` in `wrangler.jsonc` doesn't run with `wrangler preview`.
-- `NODE_VERSION` is there because Workers Builds doesn't read `mise.toml`.
-- Settings belong to a trigger: one for production, and Previews Base for other branches. Each branch copies them into its own preview trigger the first time it's pushed, so a change applies only to branches pushed after it. A branch pushed before the change keeps its old settings until its own trigger is edited.
+- The Build command is set in Workers Builds, not as `build.command` in `wrangler.jsonc`. Both `wrangler deploy` and `wrangler preview` would run `build.command` after Workers Builds' own Build command, so every build would run Astro twice.
+- `NODE_VERSION` is there because Workers Builds doesn't read `mise.toml` or `mise.lock`. Without it, a build gets the build image's default Node.
+- Each branch copies the Previews Base into its own trigger the first time it's pushed, so a change to the base applies only to branches pushed after it. A branch pushed before the change keeps its old settings until its own trigger is edited. Deleting the branch deletes its trigger and its Preview.
+- The API returns both sets as `production_settings` and `previews_base_config` from `GET /accounts/{account_id}/builds/workers/{worker_tag}`.
+- The Previews Base under Settings → Build is not the one under Variables and secrets or Bindings. That other one is the Previews' runtime configuration, which this Worker doesn't need.
 - `previews: {}` in `wrangler.jsonc` is required for the preview command.
-- `preview_urls: true` in `wrangler.jsonc`, together with Preview turned on under the Worker's Domains → Worker URL, gives each branch its own Preview URL: `https://<branch>-variablelab-www.<subdomain>.workers.dev`.
+- `preview_urls: true` in `wrangler.jsonc`, together with Preview turned on under the Worker's Domains → Worker URL, gives each branch its own Preview URL: `https://<branch>-variablelab-www.<subdomain>.workers.dev`, with each `/` in the branch name turned into `-`. The branch `ci/foo` gets `https://ci-foo-variablelab-www.<subdomain>.workers.dev`.
 
 ## Local development
 
