@@ -1,6 +1,6 @@
 # www
 
-The site at `lab.variable.land`: the Index of Variable Lab's Projects and a Project page for each. [README.md](./README.md) is for people and holds the commands; this file is for agents working in this repo.
+The site at `lab.variable.land`: the Index of Variable Lab's Projects and a Project page for each. [README.md](./README.md) is for people, [docs/development.md](./docs/development.md) holds the commands, and this file is for agents working in this repo.
 
 The site is static. `astro build` renders the pages in `src/pages` and the content in `src/content` into `dist/`, with `public/robots.txt` copied as is. The Worker has no script: [wrangler.jsonc](./wrangler.jsonc) serves `dist/` as assets, so how a path resolves, redirects or 404s is set there. The pages are designed and specified in `docs/`.
 
@@ -17,8 +17,8 @@ The site is static. `astro build` renders the pages in `src/pages` and the conte
 - Stored content is in `src/content/`, typed and checked by `src/content.config.ts`. Derived fields are computed in `src/lib/content.ts`, never stored.
 - The fixed words that `docs/design.md` names are in `src/lib/labels.ts`; [design.md](./docs/design.md#decisions) lists them.
 - Brand values come from `@variablelab/brand`, never typed by hand. CSS uses the `--vlab-*` custom properties of its `tokens.css`, which `src/styles/site.css` imports with Fontsource's IBM Plex. TypeScript (the Logo, the Class stamps, `theme-color` and the `og:image`s) reads them through `src/lib/brand.ts`. Code gets its colors from `src/lib/code.ts`, which the Project page and the `og:image`s share.
-- The tools run by name through mise's PATH; the commands are in [README.md](./README.md#local-development). In a non-interactive shell mise's hook may not run: use `mise exec -- <command>`.
-- For the visual check in [design.md](./docs/design.md#verifying), serve the build as the Worker does: `astro build`, then `wrangler dev` ([README.md](./README.md#local-development)).
+- The tools run by name through mise's PATH; the commands are in [docs/development.md](./docs/development.md#tasks). In a non-interactive shell mise's hook may not run: use `mise exec -- <command>`.
+- For the visual check in [design.md](./docs/design.md#verifying), serve the build as the Worker does: `astro build`, then `wrangler dev` ([docs/development.md](./docs/development.md#tasks)).
 
 ## Brand
 

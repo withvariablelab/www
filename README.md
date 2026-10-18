@@ -1,79 +1,29 @@
 # www
 
-The site at [lab.variable.land](https://lab.variable.land): the Index of Variable Lab's apps and libraries, and a page for each one.
+A public index of Variable Lab's apps and libraries. It is the site at [lab.variable.land](https://lab.variable.land): the Index, and a Project page for each Project.
 
-The site is static: [Astro](https://astro.build) builds it into `dist/`, and a Worker with no script serves `dist/` as [static assets](https://developers.cloudflare.com/workers/static-assets/). Each page is served without a trailing slash: `/<project>/` and `/<project>.html` redirect to `/<project>`, and an unknown path gets a 404. `/robots.txt` is `public/robots.txt`, copied as is. The site is designed and specified in [docs/](./docs):
+The site is static: [Astro](https://astro.build) builds it into `dist/`, and a Worker with no script serves `dist/` as [static assets](https://developers.cloudflare.com/workers/static-assets/). Each page is served without a trailing slash: `/<project>/` and `/<project>.html` redirect to `/<project>`, and an unknown path gets a 404. `/robots.txt` is `public/robots.txt`, copied as is. The site is designed and specified in [docs/](docs):
 
-| Doc | What it holds |
-| --- | --- |
-| [design.md](./docs/design.md) | The pages, their head and `og:image`, the rules they render by, and every measurement. |
-| [content-model.md](./docs/content-model.md) | The entities and fields behind the pages. |
-| [content.md](./docs/content.md) | The approved content: the Index and each Project. |
-| [glossary.md](./docs/glossary.md) | The terms used in code, content and copy. |
-| [add-a-project.md](./docs/add-a-project.md) | How a Project gets into the Index. |
+- [design.md](docs/design.md): the pages, their head and `og:image`, the rules they render by, and every measurement.
+- [content-model.md](docs/content-model.md): the entities and fields behind the pages.
+- [content.md](docs/content.md): the approved content of the Index and of each Project.
+- [glossary.md](docs/glossary.md): the terms used in code, content and copy.
+- [add-a-project.md](docs/add-a-project.md): how a Project gets into the Index.
 
 The brand comes from [withvariablelab/brand](https://github.com/withvariablelab/brand).
 
-## How `lab.variable.land` is split
-
-This Worker owns `lab.variable.land` as a [Custom Domain](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/), which also creates the DNS record. It serves the Index, every Project page at `/<project>`, and the `og:image`s at `/og.png` and `/og/<project>.png`.
-
-A Project that publishes its own docs deploys its own Worker, with a route for everything under `/<project>/`. Routes on the same hostname [take precedence](https://developers.cloudflare.com/workers/configuration/routing/routes/), so those paths never reach this Worker. In the Project's `wrangler.jsonc`:
-
-```jsonc
-"routes": [
-  { "pattern": "lab.variable.land/<project>/*", "zone_name": "variable.land" }
-]
-```
-
-The pattern ends in `/*`, so `/<project>` itself, the Project page, still reaches this Worker. `lab.variable.land/<project>*` would take it too.
-
-`/robots.txt` lives here because it must sit at the root. It also lists the sitemaps of the Projects' docs.
-
-This Worker serves `/<project>` with no redirect, and redirects `/<project>/` to `/<project>`. A Project's Worker may redirect `/<project>/` to `/<project>` too, as env's does. So www must never redirect the other way, from `/<project>` to `/<project>/`, or the two would loop: keep `build.format: 'file'` in `astro.config.mjs` and `html_handling: "drop-trailing-slash"` in `wrangler.jsonc`.
-
 ## Adding a Project
 
-Follow [docs/add-a-project.md](./docs/add-a-project.md).
+Follow [docs/add-a-project.md](docs/add-a-project.md).
 
-## Deploying
+## Contributing
 
-Deployed with [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) (Git integration). Its build settings, under the Worker's Settings → Build, have two sets: Production, for `main`, and Previews Base, for every other branch.
+The [contributing guide](docs/contributing.md) covers issues and pull requests, and the [development guide](docs/development.md) covers setting up the repo and running its checks.
 
-| Setting | Production | Previews Base |
-| --- | --- | --- |
-| Root directory | `/` | `/` |
-| Build command | `pnpm exec astro build` | `pnpm exec astro build` |
-| Build variable | `NODE_VERSION` = `24` | `NODE_VERSION` = `24` |
-| Deploy command | `pnpm exec wrangler deploy` | `npx wrangler preview` |
+## License
 
-- The Build command is set in Workers Builds, not as `build.command` in `wrangler.jsonc`. Both `wrangler deploy` and `wrangler preview` would run `build.command` after Workers Builds' own Build command, so every build would run Astro twice.
-- `NODE_VERSION` is there because Workers Builds doesn't read `mise.toml` or `mise.lock`. Without it, a build gets the build image's default Node.
-- Each branch copies the Previews Base into its own trigger the first time it's pushed, so a change to the base applies only to branches pushed after it. A branch pushed before the change keeps its old settings until its own trigger is edited. Deleting the branch deletes its trigger and its Preview.
-- The API returns both sets as `production_settings` and `previews_base_config` from `GET /accounts/{account_id}/builds/workers/{worker_tag}`.
-- The Previews Base under Settings → Build is not the one under Variables and secrets or Bindings. That other one is the Previews' runtime configuration, which this Worker doesn't need.
-- `previews: {}` in `wrangler.jsonc` is required for the preview command.
-- `preview_urls: true` in `wrangler.jsonc`, together with Preview turned on under the Worker's Domains → Worker URL, gives each branch its own Preview URL: `https://<branch>-variablelab-www.<subdomain>.workers.dev`, with each `/` in the branch name turned into `-`. The branch `ci/foo` gets `https://ci-foo-variablelab-www.<subdomain>.workers.dev`.
+[MIT](LICENSE).
 
-## Local development
-
-[mise](https://mise.jdx.dev) pins Node and pnpm (`mise.toml`, `mise.lock`) and puts `node_modules/.bin` on the PATH, so the tools run by name:
-
-```sh
-mise install
-pnpm install
-astro dev                   # the site, rebuilt as you edit
-rr check                    # format and lint with Biome, then types with astro check
-rr jsc --fix                # applies Biome's fixes
-astro build                 # the site, into dist/
-wrangler dev                # dist/, served as the Worker serves it
-wrangler deploy --dry-run
-```
-
-In a shell where mise isn't activated, run them as `mise exec -- <command>`.
-
-`rr check` runs Biome, then `astro check` through `@rrlab/astro-plugin`, which type-checks `.astro` files, `.ts` files and the content schema. `rr tsc` runs only the type check.
-
-CI runs `pnpm rr check` and `pnpm astro build` on each pull request to `main`. It calls the tools through pnpm because mise's GitHub Action puts only mise's shims on the PATH, not `mise.toml`'s `[env]`.
-
-A weekly workflow runs `pnpm audit` on `pnpm-lock.yaml` and keeps an issue labeled `dependency-audit` open while it finds known vulnerabilities. Dependabot opens pull requests for security updates only, never for version updates.
+<p align="center">
+  <a href="https://lab.variable.land"><img src="https://cdn.jsdelivr.net/gh/withvariablelab/brand@v0.3.1/.github/readme/logo.svg" width="24" alt="" align="absmiddle">&nbsp;Variable Land</a>
+</p>

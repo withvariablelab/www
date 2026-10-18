@@ -23,7 +23,7 @@ How a Project gets into the Index and gets its Project page. Each step ends when
    Check: its title, description and `og:image` follow [design.md](design.md#head).
 9. **Its docs, if it publishes its own.** The Project's own Worker takes everything under `lab.variable.land/<project>/`, with the route `{ "pattern": "lab.variable.land/<project>/*", "zone_name": "variable.land" }`. The pattern ends in `/*`, so the Project page at `lab.variable.land/<project>` stays with www; `lab.variable.land/<project>*` would take it too. A landing the Project had before redirects to its Project page. www's `/robots.txt` (`public/robots.txt`) lists the docs' sitemap, and any crawl rule they need, such as disallowing their API.
    Check: `lab.variable.land/<project>` shows the Project page from www, a path under `lab.variable.land/<project>/` shows the Project's docs, and `/robots.txt` names that sitemap.
-10. **Its README.** The Project's README copies its Tagline, word for word.
-    Check: the Tagline in the README matches `tagline`.
+10. **Its README.** The Project's README follows the `vlab-brand` skill's `readme.md`, and copies its Tagline and Install command word for word. Its title links to the Project page.
+    Check: the Tagline and the install command in the README match `tagline` and `installCommand`, and the README's `<h1>` links to `lab.variable.land/<project>`.
 11. **Visual review.** As in [design.md](design.md#verifying).
     Check: every item in [design.md](design.md#verifying) holds for its page and its `og:image`.
