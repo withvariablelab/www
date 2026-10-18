@@ -45,7 +45,7 @@ Where a Project runs: Node, Bun, Deno, browser, Workers, Edge.
 _Avoid_: platforms, environments, targets
 
 **Requirement**:
-The least a Project needs to work: Node 20 or later, React 18 or later.
+The least a Project needs to work: Node 22.18 or later, React 18 or later.
 _Avoid_: dependency, prerequisite, peer
 
 **Repository**:

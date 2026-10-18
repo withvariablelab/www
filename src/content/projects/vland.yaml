@@ -6,7 +6,7 @@ body: "A library, a backend or a monorepo. Every template targets Node, uses pnp
 installCommand: "pnpm add -g @variablelab/vland"
 executable: "vland"
 package: "@variablelab/vland"
-requirement: "Node 20 or later"
+requirement: "Node 22.18 or later"
 repository: "https://github.com/withvariablelab/dx/tree/main/vland/cli"
 links:
   - name: "CLI reference"
