@@ -63,8 +63,8 @@ Deployed with [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/b
 mise install
 pnpm install
 astro dev                   # the site, rebuilt as you edit
-rr jsc                      # format and lint with Biome; rr jsc --fix applies the fixes
-astro check                 # types: .astro, .ts and the content schema
+rr check                    # format and lint with Biome, then types with astro check
+rr jsc --fix                # applies Biome's fixes
 astro build                 # the site, into dist/
 wrangler dev                # dist/, served as the Worker serves it
 wrangler deploy --dry-run
@@ -72,8 +72,8 @@ wrangler deploy --dry-run
 
 In a shell where mise isn't activated, run them as `mise exec -- <command>`.
 
-`astro check` is the type check: `rr check` stops at its type-check step, because rr has no plugin for Astro.
+`rr check` runs Biome, then `astro check` through `@rrlab/astro-plugin`, which type-checks `.astro` files, `.ts` files and the content schema. `rr tsc` runs only the type check.
 
-CI runs `pnpm rr jsc`, `pnpm astro check` and `pnpm astro build` on each pull request to `main`. It calls the tools through pnpm because mise's GitHub Action puts only mise's shims on the PATH, not `mise.toml`'s `[env]`.
+CI runs `pnpm rr check` and `pnpm astro build` on each pull request to `main`. It calls the tools through pnpm because mise's GitHub Action puts only mise's shims on the PATH, not `mise.toml`'s `[env]`.
 
 A weekly workflow runs `pnpm audit` on `pnpm-lock.yaml` and keeps an issue labeled `dependency-audit` open while it finds known vulnerabilities. Dependabot opens pull requests for security updates only, never for version updates.

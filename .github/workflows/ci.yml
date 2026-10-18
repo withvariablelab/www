@@ -34,11 +34,9 @@ jobs:
       - name: 📦 Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 🧹 Lint and format
-        run: pnpm rr jsc
-
-      - name: 🔍 Check types
-        run: pnpm astro check
+      # Biome's format and lint, then astro check's types.
+      - name: 🔍 Check
+        run: pnpm rr check
 
       - name: 🏗️ Build site
         run: pnpm astro build

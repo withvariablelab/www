@@ -20,15 +20,18 @@ importers:
       '@fontsource/ibm-plex-sans':
         specifier: 5.3.0
         version: 5.3.0
+      '@rrlab/astro-plugin':
+        specifier: ^0.1.0
+        version: 0.1.0(@astrojs/check@0.9.10(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@6.0.3))(@pnpm/logger@1001.0.1)(@rrlab/cli@1.5.0(@pnpm/logger@1001.0.1))(astro@7.4.0(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(typescript@6.0.3)
       '@rrlab/biome-config':
         specifier: 0.0.3
         version: 0.0.3(@biomejs/biome@2.5.15)
       '@rrlab/biome-plugin':
         specifier: 1.1.3
-        version: 1.1.3(@biomejs/biome@2.5.15)(@pnpm/logger@1001.0.1)(@rrlab/cli@1.3.2(@pnpm/logger@1001.0.1))
+        version: 1.1.3(@biomejs/biome@2.5.15)(@pnpm/logger@1001.0.1)(@rrlab/cli@1.5.0(@pnpm/logger@1001.0.1))
       '@rrlab/cli':
-        specifier: 1.3.2
-        version: 1.3.2(@pnpm/logger@1001.0.1)
+        specifier: ^1.5.0
+        version: 1.5.0(@pnpm/logger@1001.0.1)
       '@types/node':
         specifier: 24.19.2
         version: 24.19.2
@@ -924,6 +927,15 @@ packages:
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
 
+  '@rrlab/astro-plugin@0.1.0':
+    resolution: {integrity: sha512-l0vMRX3M24+L6ZkHK914sZeT80a687I0Xa4KrmkSswICveHP1eKYLDvwo6ka4kuZzYA2CVO1zHP2jt9nZb3w3w==}
+    engines: {node: '>=22.18.0'}
+    peerDependencies:
+      '@astrojs/check': '>=0.9.0'
+      '@rrlab/cli': ^1.5.0
+      astro: '>=5.0.0'
+      typescript: ^5.0.0 || ^6.0.0
+
   '@rrlab/biome-config@0.0.3':
     resolution: {integrity: sha512-WpB6f9Gg4/Rp9+FYvocWRaoP31yLw3MLOjBrpV4kxh2gdlXMhoyowO7xeeFhAphybv0Ctc7tsq7MaB9QmgLNKA==}
     peerDependencies:
@@ -936,9 +948,9 @@ packages:
       '@biomejs/biome': '>=2.0.0'
       '@rrlab/cli': ^1.3.2
 
-  '@rrlab/cli@1.3.2':
-    resolution: {integrity: sha512-aKF5KF7bID4gaz8uGkfK6yOCoxE6Nbdf982GJ24qwDYl8X02BD12HCR54J1a4JuzynQJanzQNuCXUIBy6wSCJw==}
-    engines: {node: '>=20.0.0'}
+  '@rrlab/cli@1.5.0':
+    resolution: {integrity: sha512-McellVZThJl8oP9KvRdFbvyBMulA/txl1aEFm7owJ06Ia/6rxLbvyMsikcDiUpT5cKcqpUPyBJvMt9+/pRDwiA==}
+    engines: {node: '>=22.18.0'}
     hasBin: true
 
   '@shikijs/core@4.5.0':
@@ -1027,9 +1039,13 @@ packages:
     resolution: {integrity: sha512-DG18Hygr3y623IP7G4Fspgzjs2U8OyOHCtmfCf+Y10V23Jr6Ew50+RcoVtXFsYrisPm0BaM9r0LNV6tE2jAU0A==}
     engines: {node: '>=20.0.0'}
 
-  '@variablelab/loggy@0.2.2':
-    resolution: {integrity: sha512-uqIaSjnHEg2SxsJqyPQ2GgTN3LBozh2dLEP4n6saGvz1yMUZl9DWhhZ7Tty6M73A4I9inSle/y267qXueZtQMg==}
-    engines: {node: '>=20.0.0'}
+  '@variablelab/clibuddy@0.8.0':
+    resolution: {integrity: sha512-g46UDiJ+7vKIZQHpFwFU6pjFpToxdgaLXl8DGSOEvgC4aiDNfbUz5M2sOX11y+UKW0M1Tv324IR/OE8bUZrQ5w==}
+    engines: {node: '>=22.18.0'}
+
+  '@variablelab/loggy@0.3.0':
+    resolution: {integrity: sha512-WcMqCiKB+UQmnHy2SiCbRxE0/7R6BL/+p5NNPfU0OPARdctzue9Omkl+xQamzwCOkXI6xvvCRN4o6EFjNyKflA==}
+    engines: {node: '>=22.18.0'}
 
   '@volar/kit@2.4.28':
     resolution: {integrity: sha512-cKX4vK9dtZvDRaAzeoUdaAJEew6IdxHNCRrdp5Kvcl6zZOqb6jTOfk3kXkIkG3T7oTFXguEMt5+9ptyqYR84Pg==}
@@ -3033,25 +3049,35 @@ snapshots:
 
   '@rolldown/pluginutils@1.0.1': {}
 
+  '@rrlab/astro-plugin@0.1.0(@astrojs/check@0.9.10(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@6.0.3))(@pnpm/logger@1001.0.1)(@rrlab/cli@1.5.0(@pnpm/logger@1001.0.1))(astro@7.4.0(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1))(typescript@6.0.3)':
+    dependencies:
+      '@astrojs/check': 0.9.10(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@6.0.3)
+      '@rrlab/cli': 1.5.0(@pnpm/logger@1001.0.1)
+      '@variablelab/clibuddy': 0.8.0(@pnpm/logger@1001.0.1)
+      astro: 7.4.0(@types/node@24.19.2)(esbuild@0.28.2)(yaml@2.9.1)
+      typescript: 6.0.3
+    transitivePeerDependencies:
+      - '@pnpm/logger'
+
   '@rrlab/biome-config@0.0.3(@biomejs/biome@2.5.15)':
     dependencies:
       '@biomejs/biome': 2.5.15
 
-  '@rrlab/biome-plugin@1.1.3(@biomejs/biome@2.5.15)(@pnpm/logger@1001.0.1)(@rrlab/cli@1.3.2(@pnpm/logger@1001.0.1))':
+  '@rrlab/biome-plugin@1.1.3(@biomejs/biome@2.5.15)(@pnpm/logger@1001.0.1)(@rrlab/cli@1.5.0(@pnpm/logger@1001.0.1))':
     dependencies:
       '@biomejs/biome': 2.5.15
-      '@rrlab/cli': 1.3.2(@pnpm/logger@1001.0.1)
+      '@rrlab/cli': 1.5.0(@pnpm/logger@1001.0.1)
       '@variablelab/clibuddy': 0.7.3(@pnpm/logger@1001.0.1)
       comment-json: 4.2.5
     transitivePeerDependencies:
       - '@pnpm/logger'
 
-  '@rrlab/cli@1.3.2(@pnpm/logger@1001.0.1)':
+  '@rrlab/cli@1.5.0(@pnpm/logger@1001.0.1)':
     dependencies:
       '@clack/prompts': 0.11.0
       '@usage-spec/commander': 1.1.0
-      '@variablelab/clibuddy': 0.7.3(@pnpm/logger@1001.0.1)
-      '@variablelab/loggy': 0.2.2
+      '@variablelab/clibuddy': 0.8.0(@pnpm/logger@1001.0.1)
+      '@variablelab/loggy': 0.3.0
       commander: 14.0.3
       comment-json: 4.2.5
       fast-string-width: 3.0.2
@@ -3171,7 +3197,20 @@ snapshots:
     transitivePeerDependencies:
       - '@pnpm/logger'
 
-  '@variablelab/loggy@0.2.2':
+  '@variablelab/clibuddy@0.8.0(@pnpm/logger@1001.0.1)':
+    dependencies:
+      '@pnpm/fs.find-packages': 1000.0.24(@pnpm/logger@1001.0.1)
+      '@pnpm/types': 1001.3.0
+      ansis: 4.2.0
+      memoize: 10.2.0
+      pkg-types: 2.3.0
+      std-env: 3.9.0
+      tinyexec: 1.1.2
+      yaml: 2.8.4
+    transitivePeerDependencies:
+      - '@pnpm/logger'
+
+  '@variablelab/loggy@0.3.0':
     dependencies:
       consola: 3.4.2
       debug: 4.4.3
