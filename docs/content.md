@@ -31,7 +31,7 @@ Keeper:
 | installCommand | `pnpm add -D @rrlab/cli` |
 | executable | `rr` |
 | package | `@rrlab/cli` |
-| requirement | `Node 20 or later` |
+| requirement | `Node 22.18 or later` |
 | repository | `https://github.com/withvariablelab/dx/tree/main/run-run/cli` |
 | links | `CLI reference` → `https://github.com/withvariablelab/dx/blob/main/run-run/cli/CLI.md`; `GitHub` → the repository |
 | closingLine | `Ships no Biome or TypeScript. Each plugin installs its tool.` |
@@ -63,7 +63,7 @@ pnpm rr pack
 | installCommand | `pnpm add -g @variablelab/vland` |
 | executable | `vland` |
 | package | `@variablelab/vland` |
-| requirement | `Node 20 or later` |
+| requirement | `Node 22.18 or later` |
 | repository | `https://github.com/withvariablelab/dx/tree/main/vland/cli` |
 | links | `CLI reference` → `https://github.com/withvariablelab/dx/blob/main/vland/cli/CLI.md`; `GitHub` → the repository |
 | closingLine | `No upgrade command. After init, the project is yours.` |

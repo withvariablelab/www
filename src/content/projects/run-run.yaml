@@ -6,7 +6,7 @@ body: "Every tool is a plugin you add: Biome, oxc, tsc or tsdown. The commands s
 installCommand: "pnpm add -D @rrlab/cli"
 executable: "rr"
 package: "@rrlab/cli"
-requirement: "Node 20 or later"
+requirement: "Node 22.18 or later"
 repository: "https://github.com/withvariablelab/dx/tree/main/run-run/cli"
 links:
   - name: "CLI reference"
