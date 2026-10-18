@@ -38,7 +38,7 @@ wrangler deploy --dry-run   # the deploy, without deploying
 
 ## CI
 
-- **On each pull request to `main`:** CI runs `pnpm rr check` and `pnpm astro build`, and Workflow audit runs zizmor on the workflows. Both are required checks. CI calls the tools through pnpm because mise's GitHub Action puts only mise's shims on the PATH, not `mise.toml`'s `[env]`.
+- **On each pull request to `main`:** CI runs `pnpm rr check` and `pnpm astro build`, and Workflow audit runs zizmor on the workflows. Both are required checks.
 - **On each push:** Workers Builds builds the branch. `main` deploys the site, and every other branch deploys its own Preview, as [Deploying](#deploying) says.
 - **Every Monday:** a workflow runs `pnpm audit` on `pnpm-lock.yaml`, and keeps an issue labeled `dependency-audit` open while it finds known vulnerabilities (Dependency audit). Dependabot opens pull requests for security updates only, never for version updates.
 
