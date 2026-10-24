@@ -11,7 +11,7 @@ The approved content of the site, field by field as [content-model.md](content-m
 | projects | run-run, vland, env |
 | description | `A public index of apps and libraries. Variable Land also builds software that isn't published here.` |
 
-theme-toggle is published, but it isn't in `projects`: the Keeper keeps only the most relevant Projects in the Index, and it isn't one of them.
+theme-toggle is published but stays out of `projects`, as [add-a-project.md](add-a-project.md) says.
 
 Keeper:
 

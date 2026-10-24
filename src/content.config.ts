@@ -29,9 +29,7 @@ const link = stored({
 });
 
 const fileSnippet = stored({
-  file: z
-    .string()
-    .regex(kebabCaseFile, { error: "A File snippet's file is a kebab-case file name, such as env.ts or theme-switch.tsx." }),
+  file: z.string().regex(kebabCaseFile, { error: "A File snippet's file is a kebab-case file name, such as env.ts." }),
   placement: text("A File snippet's placement").optional(),
   language: text("A File snippet's language"),
   code: text("A File snippet's code"),

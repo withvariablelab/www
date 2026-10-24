@@ -13,7 +13,7 @@ One. The page at `/`.
 | intro | stored | The first sentence. It names apps before libraries, as the sections run. |
 | unpublishedLine | stored | The Unpublished line. |
 | keeper | stored | One Keeper. |
-| projects | stored | The Projects in order. The Keeper keeps only the most relevant Projects in the Index, so a published Project can stay out, as theme-toggle does. The page groups them by Class, Apps first; within a Class they keep this order. A new Project goes last in its Class unless the Keeper places it. |
+| projects | stored | The Projects in order: only the most relevant, as [add-a-project.md](add-a-project.md) says. The page groups them by Class, Apps first; within a Class they keep this order. A new Project goes last in its Class unless the Keeper places it. |
 | description | stored | The head description. |
 | address | derived | `lab.variable.land`. |
 | title | derived | `Variable Lab`. |
@@ -87,7 +87,7 @@ One per Project: one or more Snippets, in order.
 
 | Field | Value |
 | --- | --- |
-| file | The file name, kebab-case: `env.ts`, `theme-switch.tsx`. |
+| file | The file name, kebab-case: `env.ts`. |
 | placement | Optional. Where the code goes when that matters, shown after the name: `index.html · <head>`. Placement is said here, not with more code. |
 | language | The language label: `TypeScript`, `TSX`, `HTML`. |
 | code | The lines. They are numbered on the page. |
