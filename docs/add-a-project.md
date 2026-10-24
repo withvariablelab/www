@@ -2,8 +2,8 @@
 
 How a Project gets into the Index and gets its Project page. Each step ends when its check holds; the next step uses what the previous one left. Fields are those of [content-model.md](content-model.md), and the result is a new entry in [content.md](content.md), with the same stored fields in `src/content/projects/<name>.yaml`, which the site is built from.
 
-1. **It belongs.** It is Variable Lab's own, it is published, it isn't a fork, and it is among Variable Lab's most relevant Projects: the Keeper keeps only those in the Index. Today portless (a fork), gh-actions (not a Project) and theme-toggle (published, but not among the most relevant) stay out, and nothing private gets in until it is published.
-   Check: it has a published Package and a public Repository, and the Keeper wants it in the Index.
+1. **It belongs.** It is Variable Lab's own, it is published, and it isn't a fork. Even then, the Keeper keeps only the most relevant Projects in the Index. Today portless (a fork), gh-actions (not a Project) and theme-toggle (published, but not among the most relevant) stay out, and nothing private gets in until it is published.
+   Check: it has a published Package and a public Repository, and the Keeper approves it for the Index.
 2. **Its Class.** `class`, by the rule in [content-model.md](content-model.md#project).
    Check: one Class, which matches how its README uses it.
 3. **Its facts.** `package`, `executable` (Apps only), `installCommand`, `requirement` and/or `runtimes`, `repository` and `links`.

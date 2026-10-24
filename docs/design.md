@@ -12,7 +12,7 @@ The canvas in Claude Design is the visual source of truth: <https://claude.ai/ar
 | `RunRun`, `Vland`, `Env`, and their `-tablet` and `-phone` | Project pages |
 | `OG-Index`, `OG-RunRun`, `OG-Vland`, `OG-Env` | `og:image` |
 
-The canvas also draws theme-toggle, which is not in the Index: the Keeper keeps only the most relevant Projects there, and theme-toggle isn't one of them. The site builds none of what the canvas draws for it: its `ThemeToggle` and `OG-ThemeToggle` artboards, its row on the Index and in `OG-Index`, and its place in each Also indexed.
+The canvas also draws theme-toggle, which isn't in the Index: the Keeper keeps only the most relevant Projects in the Index, and theme-toggle isn't one of them. The site builds none of what the canvas draws for it: its `ThemeToggle` and `OG-ThemeToggle` artboards, its row on the Index and in `OG-Index`, and its place in each Also indexed.
 
 Build by looking at the canvas, not from exported files. If the canvas and this file disagree, ask the Keeper.
 
@@ -81,7 +81,7 @@ Every page:
 
 1. On the Index, a Project's name links to its Project page, and its "Published as" line links to its Repository. On the Project page, the Package links to npm and the Executable is plain text.
 2. "Published as" shows the Project's `publishedAs` ([content-model.md](content-model.md#project)) in `dim`, with an App's Executable in `ink`. On a Project page, a Library's Package is in `ink` too.
-3. Also indexed shows the Project's `alsoIndexed` ([content-model.md](content-model.md#project)). With the Index's three Projects that gives:
+3. Also indexed shows the Project's `alsoIndexed` ([content-model.md](content-model.md#project)). With today's Index that gives:
 
    | Page | Also indexed |
    | --- | --- |
@@ -160,9 +160,9 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
   4. The Example, 12px below the Install command. Both share the same left edge.
   5. The Closing line and Also indexed.
 - **Focus order in one column:** focus moves through the facts as they are drawn, row by row (`reading-flow: grid-rows`), so the Install command comes last. Where `reading-flow` isn't supported, the DOM order stands: Install first.
-- **Install command width:** half the width at 600–899px, growing past half only as far as its Command needs to fit one line, and the full width at ≤ 599px. Every Command on the site fits in half.
-- **Published as:** at ≤ 599px it spans both columns for an App, always, and for a Library whose Package is wider than one column at the phone width, 390px. On the site that happens for the two Apps: env's Package fits one column.
-- **Package:** whole wherever it fits; an App's line wraps after the separator, with the Package whole on the next line. Only when its column is narrower than it does it break, after its scope (`@variablelab/`, then the rest), never at a hyphen and never past its column. No Package on the site is wider than its column. Its link's accessible name stays exactly the Package.
+- **Install command width:** half the width at 600–899px, growing past half only as far as its Command needs to fit one line, and the full width at ≤ 599px. Today every Command fits in half.
+- **Published as:** at ≤ 599px it spans both columns for an App, always, and for a Library whose Package is wider than one column at the phone width, 390px. Today that happens for the two Apps only: env's Package fits one column.
+- **Package:** whole wherever it fits; an App's line wraps after the separator, with the Package whole on the next line. Only when its column is narrower than it does it break, after its scope (`@variablelab/`, then the rest), never at a hyphen and never past its column. Today no Package is wider than its column. Its link's accessible name stays exactly the Package.
 - **Runs on:** its last two Runtimes and the separator between them stay on one line, so the list never ends on a single Runtime, as env's would at 351px.
 
 | Element | Type | Color | Size and space |
@@ -237,7 +237,7 @@ Every `og:image` has the same frame:
 
 - **Middle:**
   - The Sign at 72px, 24px from the name, shifted 6px left so its edge lines up with the text.
-  - The name at 84px / 1, 500, `-0.04em`. If it doesn't fit the column, it shrinks to the largest whole size that does. Every name on the site fits at 84px.
+  - The name at 84px / 1, 500, `-0.04em`. If it doesn't fit the column, it shrinks to the largest whole size that does. Today every name fits at 84px.
   - The Tagline at 34px / 1.22, `-0.02em`, `max-width: 20ch`, balance, 28px below.
 - **Panel**, in mono, as three rows:
   1. **Install command:** `padding: 24px 28px`, 21px, a 1px `rule` below. A `$ ` prompt in `gutter` comes first, then the Command colored by token.

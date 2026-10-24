@@ -13,7 +13,7 @@ One. The page at `/`.
 | intro | stored | The first sentence. It names apps before libraries, as the sections run. |
 | unpublishedLine | stored | The Unpublished line. |
 | keeper | stored | One Keeper. |
-| projects | stored | The Projects in order, only those the Keeper counts among the most relevant: a published Project can stay out, as theme-toggle does. The page groups them by Class, Apps first; within a Class they keep this order. A new Project goes last in its Class unless the Keeper places it. |
+| projects | stored | The Projects in order. The Keeper keeps only the most relevant Projects in the Index, so a published Project can stay out, as theme-toggle does. The page groups them by Class, Apps first; within a Class they keep this order. A new Project goes last in its Class unless the Keeper places it. |
 | description | stored | The head description. |
 | address | derived | `lab.variable.land`. |
 | title | derived | `Variable Lab`. |
