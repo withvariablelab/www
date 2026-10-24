@@ -13,7 +13,7 @@ One. The page at `/`.
 | intro | stored | The first sentence. It names apps before libraries, as the sections run. |
 | unpublishedLine | stored | The Unpublished line. |
 | keeper | stored | One Keeper. |
-| projects | stored | The Projects in order. The page groups them by Class, Apps first; within a Class they keep this order. A new Project goes last in its Class unless the Keeper places it. |
+| projects | stored | The Projects in order: only the most relevant, as [add-a-project.md](add-a-project.md) says. The page groups them by Class, Apps first; within a Class they keep this order. A new Project goes last in its Class unless the Keeper places it. |
 | description | stored | The head description. |
 | address | derived | `lab.variable.land`. |
 | title | derived | `Variable Lab`. |
@@ -39,7 +39,7 @@ One per Project in the Index. Every Project has a Project page at `lab.variable.
 | name | stored | Lowercase kebab-case, never `og`, which holds the `og:image`s. It is the title and the last segment of the Address. | The Project's own name, never its Executable or Package. |
 | class | stored | `App` or `Library`. | App if it is run (it has an Executable); Library if it is imported. |
 | sign | stored, optional | The Sign: one path on a 24×24 viewBox, filled with `fill-rule="evenodd"`. Without one, the page shows the Class stamp. | Copied from the Project's repository, `brand/sign.svg`. Drawing one follows the `vlab-brand` skill. |
-| tagline | stored | One sentence, 34–41 characters, ending with a period. It fits one line on the Project page at desktop and tablet widths. | Says what the Project is or guarantees. Example: `The theme is set before first paint.` |
+| tagline | stored | One sentence, 34–41 characters, ending with a period. It fits one line on the Project page at desktop and tablet widths. | Says what the Project is or guarantees. Example: `Only declared variables, checked at boot.` |
 | body | stored | One to three sentences. | Facts from the README: what it does and how. It follows the Tagline without repeating it. |
 | installCommand | stored | One Command. | The one the Project's README recommends, as written: `pnpm add` for a Library, `pnpm add -g` or `pnpm add -D` for an App, by where it gets installed. |
 | executable | stored, Apps only | The Executable. | As its `package.json` `bin` names it. |
@@ -62,7 +62,7 @@ A Project has a requirement, runtimes, or both.
 
 ### Closing line
 
-It says what the Project leaves out, as the skill's `voice.md` describes, and like every claim it is checked against the code. The pattern is "No [something concrete]. [A fact]." Example: `No CSS to import. No provider to wrap.`
+It says what the Project leaves out, as the skill's `voice.md` describes, and like every claim it is checked against the code. The pattern is "No [something concrete]. [A fact]." Example: `No upgrade command. After init, the project is yours.`
 
 Before it ships:
 
@@ -87,7 +87,7 @@ One per Project: one or more Snippets, in order.
 
 | Field | Value |
 | --- | --- |
-| file | The file name, kebab-case: `env.ts`, `theme-switch.tsx`. |
+| file | The file name, kebab-case: `env.ts`. |
 | placement | Optional. Where the code goes when that matters, shown after the name: `index.html · <head>`. Placement is said here, not with more code. |
 | language | The language label: `TypeScript`, `TSX`, `HTML`. |
 | code | The lines. They are numbered on the page. |

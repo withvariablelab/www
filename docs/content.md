@@ -8,8 +8,10 @@ The approved content of the site, field by field as [content-model.md](content-m
 | --- | --- |
 | intro | `A public index of apps and libraries.` |
 | unpublishedLine | `Variable Land also builds software that isn't published here.` |
-| projects | run-run, vland, env, theme-toggle |
+| projects | run-run, vland, env |
 | description | `A public index of apps and libraries. Variable Land also builds software that isn't published here.` |
+
+theme-toggle is published but stays out of `projects`, as [add-a-project.md](add-a-project.md) says.
 
 Keeper:
 
@@ -109,43 +111,4 @@ const Env = schema({
 });
 
 export const env = defineEnv({ schema: Env });
-```
-
-## theme-toggle
-
-| Field | Value |
-| --- | --- |
-| class | Library |
-| sign | `M2 2h4v20H2V2zm8 0h12v20H10V2z` |
-| tagline | `The theme is set before first paint.` |
-| body | `Light, dark or system. A blocking inline script puts the dark class on the html element before the page paints. A React hook reads and changes it.` |
-| installCommand | `pnpm add @variablelab/theme-toggle` |
-| package | `@variablelab/theme-toggle` |
-| requirement | `React 18 or later` |
-| repository | `https://github.com/withvariablelab/theme-toggle` |
-| links | `GitHub` → the repository. It has no docs of its own. |
-| closingLine | `No CSS to import. No provider to wrap.` |
-| description | `The theme is set before first paint. Light, dark or system.` |
-
-Example: two File snippets, and the `og:image` shows the second (ogSnippet: `theme-switch.tsx`). The first is `index.html`, placement `<head>`, language `HTML`:
-
-```html
-<script
-  src="https://unpkg.com/@variablelab/theme-toggle/dist/initial.js"
-></script>
-```
-
-The second is `theme-switch.tsx`, language `TSX`:
-
-```tsx
-import { useColorMode } from "@variablelab/theme-toggle";
-
-export function ThemeSwitch() {
-  const { colorMode, setColorMode } = useColorMode();
-  const next = colorMode === "dark" ? "light" : "dark";
-
-  return (
-    <button onClick={() => setColorMode(next)}>{colorMode}</button>
-  );
-}
 ```

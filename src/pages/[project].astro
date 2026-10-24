@@ -38,7 +38,7 @@ const phoneColumn = (390 - 2 * 16 - 24) / 2;
 const metaAdvance = 0.6 * 12;
 const publishedAsWide = publishedAs.executable !== undefined || [...publishedAs.package].length * metaAdvance > phoneColumn;
 
-// A scoped Package, such as @variablelab/theme-toggle, splits after its scope: the one place it may break.
+// A scoped Package, such as @variablelab/env, splits after its scope: the one place it may break.
 const scopeLength = publishedAs.package.startsWith("@") ? publishedAs.package.indexOf("/") + 1 : 0;
 const packageScope = publishedAs.package.slice(0, scopeLength);
 const packageName = publishedAs.package.slice(scopeLength);

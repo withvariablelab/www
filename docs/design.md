@@ -9,8 +9,10 @@ The canvas in Claude Design is the visual source of truth: <https://claude.ai/ar
 | Artboards | Page |
 | --- | --- |
 | `Main`, `Main-tablet`, `Main-phone` | Index |
-| `RunRun`, `Vland`, `Env`, `ThemeToggle`, and their `-tablet` and `-phone` | Project pages |
-| `OG-Index`, `OG-RunRun`, `OG-Vland`, `OG-Env`, `OG-ThemeToggle` | `og:image` |
+| `RunRun`, `Vland`, `Env`, and their `-tablet` and `-phone` | Project pages |
+| `OG-Index`, `OG-RunRun`, `OG-Vland`, `OG-Env` | `og:image` |
+
+The canvas also draws theme-toggle, which stays out of the Index, as [add-a-project.md](add-a-project.md) says. The site builds none of what the canvas draws for it: its `ThemeToggle` and `OG-ThemeToggle` artboards, its row on the Index and in `OG-Index`, and its place in each Also indexed.
 
 Build by looking at the canvas, not from exported files. If the canvas and this file disagree, ask the Keeper.
 
@@ -79,14 +81,13 @@ Every page:
 
 1. On the Index, a Project's name links to its Project page, and its "Published as" line links to its Repository. On the Project page, the Package links to npm and the Executable is plain text.
 2. "Published as" shows the Project's `publishedAs` ([content-model.md](content-model.md#project)) in `dim`, with an App's Executable in `ink`. On a Project page, a Library's Package is in `ink` too.
-3. Also indexed shows the Project's `alsoIndexed` ([content-model.md](content-model.md#project)). In the canvas that gives:
+3. Also indexed shows the Project's `alsoIndexed` ([content-model.md](content-model.md#project)). With today's Index that gives:
 
    | Page | Also indexed |
    | --- | --- |
-   | run-run | vland, env, theme-toggle |
-   | vland | run-run, env, theme-toggle |
-   | env | theme-toggle, run-run, vland |
-   | theme-toggle | env, run-run, vland |
+   | run-run | vland, env |
+   | vland | run-run, env |
+   | env | run-run, vland |
 4. The header shows the page's Address on the left, in mono, and the Signature on the right. On a Project page the Signature is one link to `/`; on the Index it isn't a link.
 5. The Keeper's column is only on the Index: the name (not a link), the site (a link), the statement, and `GitHub` to the org.
 6. The whole Install command box is the Copy button.
@@ -159,9 +160,9 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
   4. The Example, 12px below the Install command. Both share the same left edge.
   5. The Closing line and Also indexed.
 - **Focus order in one column:** focus moves through the facts as they are drawn, row by row (`reading-flow: grid-rows`), so the Install command comes last. Where `reading-flow` isn't supported, the DOM order stands: Install first.
-- **Install command width:** half the width at 600–899px, growing past half only as far as its Command needs to fit one line (theme-toggle's, near 600px), and the full width at ≤ 599px.
-- **Published as:** at ≤ 599px it spans both columns for an App, always, and for a Library whose Package is wider than one column at the phone width, 390px. In the canvas that happens for the two Apps and theme-toggle.
-- **Package:** whole wherever it fits; an App's line wraps after the separator, with the Package whole on the next line. Only when its column is narrower than it does it break, after its scope (`@variablelab/`, then `theme-toggle`), never at a hyphen and never past its column: theme-toggle's does at 600–651px. Its link's accessible name stays exactly the Package.
+- **Install command width:** half the width at 600–899px, growing past half only as far as its Command needs to fit one line, and the full width at ≤ 599px.
+- **Published as:** at ≤ 599px it spans both columns for an App, always, and for a Library whose Package is wider than one column at the phone width, 390px.
+- **Package:** whole wherever it fits; an App's line wraps after the separator, with the Package whole on the next line. Only when its column is narrower than it does it break, after its scope (`@variablelab/`, then the rest), never at a hyphen and never past its column. Its link's accessible name stays exactly the Package.
 - **Runs on:** its last two Runtimes and the separator between them stay on one line, so the list never ends on a single Runtime, as env's would at 351px.
 
 | Element | Type | Color | Size and space |
@@ -236,11 +237,11 @@ Every `og:image` has the same frame:
 
 - **Middle:**
   - The Sign at 72px, 24px from the name, shifted 6px left so its edge lines up with the text.
-  - The name at 84px / 1, 500, `-0.04em`. If it doesn't fit the column, it shrinks to the largest whole size that does: `theme-toggle` is 71px.
+  - The name at 84px / 1, 500, `-0.04em`. If it doesn't fit the column, it shrinks to the largest whole size that does.
   - The Tagline at 34px / 1.22, `-0.02em`, `max-width: 20ch`, balance, 28px below.
 - **Panel**, in mono, as three rows:
   1. **Install command:** `padding: 24px 28px`, 21px, a 1px `rule` below. A `$ ` prompt in `gutter` comes first, then the Command colored by token.
-  2. **Snippet name:** the `ogSnippet` name (`env.ts`, `theme-switch.tsx` or `Terminal`), `padding: 16px 28px`, 17px, in the syntax `keyword` color, a 1px `rule` below.
+  2. **Snippet name:** the `ogSnippet` name (`env.ts` or `Terminal`), `padding: 16px 28px`, 17px, in the syntax `keyword` color, a 1px `rule` below.
   3. **Code:** that Snippet's code at 20px / 34px, colored with the syntax palette.
      - A File snippet has `padding: 22px 0` and line numbers 30px wide, right-aligned, in `gutter`, 24px before the code.
      - A Terminal snippet has `padding: 22px 28px` and no line numbers. Its comments are in `comment`, each Command gets a `$ ` prompt, and the line between groups is a blank 34px.
