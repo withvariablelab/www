@@ -80,7 +80,7 @@ const example = stored({
 const project = stored({
   name: z
     .string()
-    .regex(kebabCase, { error: "A Project's name is lowercase kebab-case, such as theme-toggle." })
+    .regex(kebabCase, { error: "A Project's name is lowercase kebab-case, such as run-run." })
     .refine((name) => name !== "og", { error: 'A Project is never named "og": /og/ holds the og:images.' }),
   class: z.enum(["App", "Library"], { error: 'class is "App" or "Library".' }),
   // The Sign: the d attribute of the one path in the Project's brand/sign.svg.

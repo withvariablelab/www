@@ -16,5 +16,4 @@ index:
     - "run-run"
     - "vland"
     - "env"
-    - "theme-toggle"
   description: "A public index of apps and libraries. Variable Land also builds software that isn't published here."
