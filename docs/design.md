@@ -6,11 +6,11 @@ What to build for `lab.variable.land`: its pages, their head and `og:image`, the
 
 The canvas in Claude Design is the visual source of truth: <https://claude.ai/artifact/378BdwFb3fCtP6oCrMPU4v>. It has each page at desktop (1280), tablet (834) and phone (390), and the `og:image` of each page.
 
-| Artboards | Page |
-| --- | --- |
-| `Main`, `Main-tablet`, `Main-phone` | Index |
+| Artboards                                                  | Page          |
+| ---------------------------------------------------------- | ------------- |
+| `Main`, `Main-tablet`, `Main-phone`                        | Index         |
 | `RunRun`, `Vland`, `Env`, and their `-tablet` and `-phone` | Project pages |
-| `OG-Index`, `OG-RunRun`, `OG-Vland`, `OG-Env` | `og:image` |
+| `OG-Index`, `OG-RunRun`, `OG-Vland`, `OG-Env`              | `og:image`    |
 
 The canvas also draws theme-toggle, which stays out of the Index, as [add-a-project.md](add-a-project.md) says. The site builds none of what the canvas draws for it: its `ThemeToggle` and `OG-ThemeToggle` artboards, its row on the Index and in `OG-Index`, and its place in each Also indexed.
 
@@ -34,14 +34,14 @@ An agent without access builds from this file, which carries every measurement.
 
 ## Pages
 
-| Path | What it is | Served by |
-| --- | --- | --- |
-| `/` | The Index. | www |
-| `/<project>` | A Project page, for every Project in the Index, at that exact path. | www |
-| `/og.png`, `/og/<project>.png` | The `og:image` of the Index and of each Project page. | www |
-| `/favicon.svg`, `/apple-touch-icon.png` | The icons. | www |
-| `/robots.txt` | Crawl rules. | www |
-| Everything under `/<project>/`, such as `/env/docs/` and `/env/llms.txt` | Docs the Project publishes itself, with what they serve. | That Project's own Worker |
+| Path                                                                     | What it is                                                          | Served by                 |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------- |
+| `/`                                                                      | The Index.                                                          | www                       |
+| `/<project>`                                                             | A Project page, for every Project in the Index, at that exact path. | www                       |
+| `/og.png`, `/og/<project>.png`                                           | The `og:image` of the Index and of each Project page.               | www                       |
+| `/favicon.svg`, `/apple-touch-icon.png`                                  | The icons.                                                          | www                       |
+| `/robots.txt`                                                            | Crawl rules.                                                        | www                       |
+| Everything under `/<project>/`, such as `/env/docs/` and `/env/llms.txt` | Docs the Project publishes itself, with what they serve.            | That Project's own Worker |
 
 So none of www's own paths sit under `/<project>/`: when a Project publishes docs, that whole path is its Worker's. For a Project without docs, `/<project>/` reaches www, which redirects it to `/<project>`.
 
@@ -83,11 +83,11 @@ Every page:
 2. "Published as" shows the Project's `publishedAs` ([content-model.md](content-model.md#project)) in `dim`, with an App's Executable in `ink`. On a Project page, a Library's Package is in `ink` too.
 3. Also indexed shows the Project's `alsoIndexed` ([content-model.md](content-model.md#project)). With today's Index that gives:
 
-   | Page | Also indexed |
-   | --- | --- |
-   | run-run | vland, env |
-   | vland | run-run, env |
-   | env | run-run, vland |
+   | Page    | Also indexed   |
+   | ------- | -------------- |
+   | run-run | vland, env     |
+   | vland   | run-run, env   |
+   | env     | run-run, vland |
 4. The header shows the page's Address on the left, in mono, and the Signature on the right. On a Project page the Signature is one link to `/`; on the Index it isn't a link.
 5. The Keeper's column is only on the Index: the name (not a link), the site (a link), the statement, and `GitHub` to the org.
 6. The whole Install command box is the Copy button.
@@ -106,11 +106,11 @@ Shared by every page.
 - **Page:** `ground` background, `ink` text, IBM Plex Sans at 16px / 1.45.
 - **Container:** `max-width: 1040px`, centered. Two columns, `minmax(0, 1fr) 280px`, with `column-gap: 64px`. The header spans both.
 
-  | Width | Layout | Padding |
-  | --- | --- | --- |
-  | ≥ 900px | two columns | `28px 48px 140px` |
-  | 600–899px | one column | `24px 32px 120px` |
-  | ≤ 599px | one column | `20px 16px 96px` |
+  | Width     | Layout      | Padding           |
+  | --------- | ----------- | ----------------- |
+  | ≥ 900px   | two columns | `28px 48px 140px` |
+  | 600–899px | one column  | `24px 32px 120px` |
+  | ≤ 599px   | one column  | `20px 16px 96px`  |
 - **Header:** the Address on one side and the Signature on the other (`space-between`), centered on the cross axis, `gap: 24px`. `padding-bottom: 18px`, then a 1px `rule` below.
   - Address: `meta`, `dim`.
   - Signature: the Logo at 16×18, 8px from `Variable Land` in `ui` at 500 with `-0.015em`, `ink`.
@@ -132,21 +132,21 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
   - The Keeper is static, `margin-top: 24px`, `padding: 16px 0`, with a 1px `rule` above and below.
   - It fits on the first screen.
 
-| Element | Type | Color | Size and space |
-| --- | --- | --- | --- |
-| Intro block | | | `padding: 36px 0 12px` |
-| intro | `title`, balance | `ink` | `max-width: 24ch` on desktop, none in one column |
-| Unpublished line | 16px / 1.45, pretty | `dim` | `margin-top: 10px`; `max-width: 42ch` on desktop, none in one column |
-| Keeper name | 15px, 500, `-0.015em` | `ink` | |
-| Keeper site | `small`, underlined link at a 3px offset | `dim`; underline `dim` on hover | `margin-top: 6px` |
-| Keeper statement | `small`, pretty | `ink` | `margin-top: 14px`, `max-width: 52ch` |
-| Keeper GitHub | `small`, underlined link at a 3px offset | `dim` | `margin-top: 16px` |
-| Class heading (`Apps`, `Libraries`) | `ui` at 500, with `-0.011em` | `ink` | Its Class stamp beside the text, as the skill's `iconography.md` sets shapes beside text; `margin-top: 28px`, `padding-bottom: 14px` |
-| Project row | | | Grid `28px minmax(0, 1fr)`, `column-gap: 20px`, `padding: 26px 0`, a 1px `rule` above |
-| Sign | | `ink` | 28px; the Class stamp when the Project has no Sign |
-| Project name | `heading`; underlined link at a 5px offset | `ink`; underline `ink` on hover | |
-| Tagline | 16px / 1.45, pretty | `ink` | `margin-top: 6px`, `max-width: 42ch` |
-| Published as | `meta`; underlined link at a 3px offset | `dim`, the Executable `ink` | `margin-top: 8px` |
+| Element                             | Type                                       | Color                           | Size and space                                                                                                                       |
+| ----------------------------------- | ------------------------------------------ | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Intro block                         |                                            |                                 | `padding: 36px 0 12px`                                                                                                               |
+| intro                               | `title`, balance                           | `ink`                           | `max-width: 24ch` on desktop, none in one column                                                                                     |
+| Unpublished line                    | 16px / 1.45, pretty                        | `dim`                           | `margin-top: 10px`; `max-width: 42ch` on desktop, none in one column                                                                 |
+| Keeper name                         | 15px, 500, `-0.015em`                      | `ink`                           |                                                                                                                                      |
+| Keeper site                         | `small`, underlined link at a 3px offset   | `dim`; underline `dim` on hover | `margin-top: 6px`                                                                                                                    |
+| Keeper statement                    | `small`, pretty                            | `ink`                           | `margin-top: 14px`, `max-width: 52ch`                                                                                                |
+| Keeper GitHub                       | `small`, underlined link at a 3px offset   | `dim`                           | `margin-top: 16px`                                                                                                                   |
+| Class heading (`Apps`, `Libraries`) | `ui` at 500, with `-0.011em`               | `ink`                           | Its Class stamp beside the text, as the skill's `iconography.md` sets shapes beside text; `margin-top: 28px`, `padding-bottom: 14px` |
+| Project row                         |                                            |                                 | Grid `28px minmax(0, 1fr)`, `column-gap: 20px`, `padding: 26px 0`, a 1px `rule` above                                                |
+| Sign                                |                                            | `ink`                           | 28px; the Class stamp when the Project has no Sign                                                                                   |
+| Project name                        | `heading`; underlined link at a 5px offset | `ink`; underline `ink` on hover |                                                                                                                                      |
+| Tagline                             | 16px / 1.45, pretty                        | `ink`                           | `margin-top: 6px`, `max-width: 42ch`                                                                                                 |
+| Published as                        | `meta`; underlined link at a 3px offset    | `dim`, the Executable `ink`     | `margin-top: 8px`                                                                                                                    |
 
 ## Project page
 
@@ -165,30 +165,30 @@ The Index is read, not browsed: a list under the house's own sentence, not a gri
 - **Package:** whole wherever it fits; an App's line wraps after the separator, with the Package whole on the next line. Only when its column is narrower than it does it break, after its scope (`@variablelab/`, then the rest), never at a hyphen and never past its column. Its link's accessible name stays exactly the Package.
 - **Runs on:** its last two Runtimes and the separator between them stay on one line, so the list never ends on a single Runtime, as env's would at 351px.
 
-| Element | Type | Color | Size and space |
-| --- | --- | --- | --- |
-| Sign and name | | | Side by side, 18px apart, `margin-top: 36px` |
-| Sign | | `ink` | 56px; the Class stamp when the Project has no Sign |
-| Name | `display` | `ink` | |
-| Tagline | `lead`, balance | `ink` | `margin-top: 22px`, `max-width: 36ch`; one line at desktop and tablet |
-| Body | `body`, pretty | `ink-muted` | `margin-top: 16px`, `max-width: 58ch` |
-| Facts | | | A column, `gap: 22px` |
-| Fact label (`Install`, `Requires`, `Runs on`, `Published as`, `Links`) | `label` | `dim` | 6px above its value, 8px for `Install` |
-| Requires, Runs on | `small`, pretty | `ink` | |
-| Published as | `meta` | `dim`, an App's Executable `ink`, a Library's Package `ink`; the Package is an underlined link at a 3px offset | |
-| Links | `small`, each an underlined link at a 3px offset | `dim`; underline `dim` on hover | A column, `gap: 4px` |
-| Install command box | `label` at line height 1.5, the Command colored by token ([content-model.md](content-model.md#command)), one line | `surface` background, 1px `rule` border, `rule-strong` on hover | `min-height: 44px`, `padding: 10px 12px`, full width of its column, the Command on the left and the icon on the right, 10px apart |
-| Copy, Copied icon | UI icons, drawn as [Copy and Copied icons](#copy-and-copied-icons) gives | `dim`, `ink` while the box is hovered | 14px |
-| Example | | `surface` background, 1px `rule` border | `margin-top: 32px`, 12px in one column |
-| Snippet header | `meta` | The name in the syntax `keyword` color, the language label in the syntax `comment` color | The name on the left and the label on the right (`space-between`, baseline, `gap: 16px`), `padding: 10px 16px`, a 1px `rule` below; a later Snippet's header also has one above |
-| Snippet code | `code` | `ink`, colored by token with the syntax palette | `padding: 18px 16px 20px`; a File snippet has no left padding, because its line numbers take it |
-| Line numbers (File snippet) | | Syntax `gutter`, `aria-hidden`, not selectable | 24px wide, right-aligned, 20px before the code |
-| Prompt (Terminal snippet) | | Syntax `gutter`, `aria-hidden`, not selectable | `$`, 2ch wide |
-| Terminal comment | | Syntax `comment` | Its own line above its Commands; a blank 20px line between groups |
-| Closing line | `small`, pretty | `dim` | `margin-top: 28px` |
-| Also indexed | | | `margin-top: 48px`, `padding-top: 16px`, a 1px `rule` above |
-| Also indexed label | `label` | `dim` | `margin-bottom: 10px` |
-| Also indexed item | `small`, a link to its Project page | `ink` | Its Sign beside the name, as the skill's `iconography.md` sets shapes beside text; items wrap, `gap: 12px 28px` |
+| Element                                                                | Type                                                                                                              | Color                                                                                                          | Size and space                                                                                                                                                                  |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sign and name                                                          |                                                                                                                   |                                                                                                                | Side by side, 18px apart, `margin-top: 36px`                                                                                                                                    |
+| Sign                                                                   |                                                                                                                   | `ink`                                                                                                          | 56px; the Class stamp when the Project has no Sign                                                                                                                              |
+| Name                                                                   | `display`                                                                                                         | `ink`                                                                                                          |                                                                                                                                                                                 |
+| Tagline                                                                | `lead`, balance                                                                                                   | `ink`                                                                                                          | `margin-top: 22px`, `max-width: 36ch`; one line at desktop and tablet                                                                                                           |
+| Body                                                                   | `body`, pretty                                                                                                    | `ink-muted`                                                                                                    | `margin-top: 16px`, `max-width: 58ch`                                                                                                                                           |
+| Facts                                                                  |                                                                                                                   |                                                                                                                | A column, `gap: 22px`                                                                                                                                                           |
+| Fact label (`Install`, `Requires`, `Runs on`, `Published as`, `Links`) | `label`                                                                                                           | `dim`                                                                                                          | 6px above its value, 8px for `Install`                                                                                                                                          |
+| Requires, Runs on                                                      | `small`, pretty                                                                                                   | `ink`                                                                                                          |                                                                                                                                                                                 |
+| Published as                                                           | `meta`                                                                                                            | `dim`, an App's Executable `ink`, a Library's Package `ink`; the Package is an underlined link at a 3px offset |                                                                                                                                                                                 |
+| Links                                                                  | `small`, each an underlined link at a 3px offset                                                                  | `dim`; underline `dim` on hover                                                                                | A column, `gap: 4px`                                                                                                                                                            |
+| Install command box                                                    | `label` at line height 1.5, the Command colored by token ([content-model.md](content-model.md#command)), one line | `surface` background, 1px `rule` border, `rule-strong` on hover                                                | `min-height: 44px`, `padding: 10px 12px`, full width of its column, the Command on the left and the icon on the right, 10px apart                                               |
+| Copy, Copied icon                                                      | UI icons, drawn as [Copy and Copied icons](#copy-and-copied-icons) gives                                          | `dim`, `ink` while the box is hovered                                                                          | 14px                                                                                                                                                                            |
+| Example                                                                |                                                                                                                   | `surface` background, 1px `rule` border                                                                        | `margin-top: 32px`, 12px in one column                                                                                                                                          |
+| Snippet header                                                         | `meta`                                                                                                            | The name in the syntax `keyword` color, the language label in the syntax `comment` color                       | The name on the left and the label on the right (`space-between`, baseline, `gap: 16px`), `padding: 10px 16px`, a 1px `rule` below; a later Snippet's header also has one above |
+| Snippet code                                                           | `code`                                                                                                            | `ink`, colored by token with the syntax palette                                                                | `padding: 18px 16px 20px`; a File snippet has no left padding, because its line numbers take it                                                                                 |
+| Line numbers (File snippet)                                            |                                                                                                                   | Syntax `gutter`, `aria-hidden`, not selectable                                                                 | 24px wide, right-aligned, 20px before the code                                                                                                                                  |
+| Prompt (Terminal snippet)                                              |                                                                                                                   | Syntax `gutter`, `aria-hidden`, not selectable                                                                 | `$`, 2ch wide                                                                                                                                                                   |
+| Terminal comment                                                       |                                                                                                                   | Syntax `comment`                                                                                               | Its own line above its Commands; a blank 20px line between groups                                                                                                               |
+| Closing line                                                           | `small`, pretty                                                                                                   | `dim`                                                                                                          | `margin-top: 28px`                                                                                                                                                              |
+| Also indexed                                                           |                                                                                                                   |                                                                                                                | `margin-top: 48px`, `padding-top: 16px`, a 1px `rule` above                                                                                                                     |
+| Also indexed label                                                     | `label`                                                                                                           | `dim`                                                                                                          | `margin-bottom: 10px`                                                                                                                                                           |
+| Also indexed item                                                      | `small`, a link to its Project page                                                                               | `ink`                                                                                                          | Its Sign beside the name, as the skill's `iconography.md` sets shapes beside text; items wrap, `gap: 12px 28px`                                                                 |
 
 Snippet code follows the text flow in the skill's `typography.md`; in a Terminal snippet, that keeps `--no-install` and `my-app` whole. On these pages:
 
@@ -202,10 +202,10 @@ The Install command fits its box on one line. `text-overflow: ellipsis` is a las
 
 The two icons of the Install command box (rule 6). Each is drawn on `viewBox 0 0 16 16` by the stroke rules for UI icons in the skill's `iconography.md`.
 
-| Icon | Use | Geometry |
-| --- | --- | --- |
-| Copy | Copies the Install command. | `<rect x="5.75" y="5.75" width="8.5" height="8.5"/>` and `<path d="M2.75 10.25V2.75h7.5"/>` |
-| Copied | Replaces Copy for 1.2 s after a copy. | `<path d="M3 8.5l3.25 3.25L13 5"/>` |
+| Icon   | Use                                   | Geometry                                                                                    |
+| ------ | ------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Copy   | Copies the Install command.           | `<rect x="5.75" y="5.75" width="8.5" height="8.5"/>` and `<path d="M2.75 10.25V2.75h7.5"/>` |
+| Copied | Replaces Copy for 1.2 s after a copy. | `<path d="M3 8.5l3.25 3.25L13 5"/>`                                                         |
 
 ## og:image
 

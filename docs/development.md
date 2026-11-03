@@ -66,12 +66,12 @@ This Worker serves `/<project>` with no redirect, and redirects `/<project>/` to
 
 Deployed with [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) (Git integration). Its build settings, under the Worker's Settings → Build, have two sets: Production, for `main`, and Previews Base, for every other branch.
 
-| Setting | Production | Previews Base |
-| --- | --- | --- |
-| Root directory | `/` | `/` |
-| Build command | `pnpm exec astro build` | `pnpm exec astro build` |
-| Build variable | `NODE_VERSION` = `24` | `NODE_VERSION` = `24` |
-| Deploy command | `pnpm exec wrangler deploy` | `npx wrangler preview` |
+| Setting        | Production                  | Previews Base           |
+| -------------- | --------------------------- | ----------------------- |
+| Root directory | `/`                         | `/`                     |
+| Build command  | `pnpm exec astro build`     | `pnpm exec astro build` |
+| Build variable | `NODE_VERSION` = `24`       | `NODE_VERSION` = `24`   |
+| Deploy command | `pnpm exec wrangler deploy` | `npx wrangler preview`  |
 
 - The Build command is set in Workers Builds, not as `build.command` in `wrangler.jsonc`. Both `wrangler deploy` and `wrangler preview` would run `build.command` after Workers Builds' own Build command, so every build would run Astro twice.
 - `NODE_VERSION` is there because Workers Builds doesn't read `mise.toml` or `mise.lock`. Without it, a build gets the build image's default Node.
