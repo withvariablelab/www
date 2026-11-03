@@ -42,7 +42,7 @@ wrangler deploy --dry-run   # the deploy, without deploying
 ## CI
 
 - **On each commit:** the git hooks ([lefthook](https://lefthook.dev)) run `rr jsc --fix-staged` on the staged files, `rr tsc` when a TypeScript or `.astro` file or a tsconfig changes, and gitleaks on the staged changes, in parallel. `lefthook.yml` extends `base.yml`, the config `@rrlab/cli` ships, and then `lefthook/tsc.yml`, which adds `.astro` files to its `tsc` job. Its own `shared-hooks` job fails the commit, saying to run `pnpm install`, when `base.yml` is missing from `node_modules`. There is no pre-push hook: www has no tests.
-- **On each pull request to `main`:** CI scans the pull request's commits for secrets with gitleaks and, once the scan passes, runs `pnpm rr check` and `pnpm astro build`, with the tools mise pins. Workflow audit runs zizmor on the workflows. Both are required checks.
+- **On each pull request to `main`:** CI runs `pnpm rr check` and `pnpm astro build` with the tools mise pins, and beside them gitleaks scans the pull request's commits for secrets. CI's `Check` passes when both do. Workflow audit runs zizmor on the workflows. Both are required checks.
 - **On each push:** Workers Builds builds the branch. `main` deploys the site, and every other branch deploys its own Preview, as [Deploying](#deploying) says.
 - **Every Monday:** a workflow runs `pnpm audit` on `pnpm-lock.yaml`, and keeps an issue labeled `dependency-audit` open while it finds known vulnerabilities (Dependency audit). Dependabot opens pull requests for security updates only, never for version updates.
 
