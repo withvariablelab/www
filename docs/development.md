@@ -22,9 +22,9 @@ mise install
 pnpm install
 ```
 
-`pnpm install` also installs the git hooks: lefthook's postinstall writes them. With `CI` set, that postinstall skips them, so after a `CI=1 pnpm install` run `lefthook install` to add them.
-
 In a shell where mise isn't activated, run them as `mise exec -- <command>`.
+
+`pnpm install` also installs the git hooks: lefthook's postinstall writes them. With `CI` set, that postinstall skips them, so after a `CI=1 pnpm install` run `lefthook install` to add them.
 
 ## Tasks
 
