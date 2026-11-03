@@ -14,7 +14,7 @@ How to work on www in a clone. The [contributing guide](contributing.md) covers 
 
 ## Setup
 
-[mise](https://mise.jdx.dev) pins Node and pnpm (`mise.toml`, `mise.lock`) and puts `node_modules/.bin` on the PATH, so the tools run by name:
+[mise](https://mise.jdx.dev) 2026.10.19 or later pins Node 24 and pnpm 12 (`mise.toml`, `mise.lock`) and puts `node_modules/.bin` on the PATH, so the tools run by name:
 
 ```sh
 mise install
