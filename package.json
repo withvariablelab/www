@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@astrojs/check": "0.9.10",
+    "@astrojs/check": "0.9.12",
     "@biomejs/biome": "2.6.4",
     "@fontsource/ibm-plex-mono": "5.3.0",
     "@fontsource/ibm-plex-sans": "5.3.0",
@@ -12,7 +12,7 @@
     "@rrlab/biome-config": "0.0.7",
     "@rrlab/biome-plugin": "1.2.3",
     "@rrlab/cli": "^1.7.0",
-    "@types/node": "24.19.2",
+    "@types/node": "26.6.6",
     "@variablelab/brand": "0.3.0",
     "astro": "7.4.0",
     "satori": "0.60.0",
