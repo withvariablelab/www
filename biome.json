@@ -1,21 +1,10 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["@rrlab/biome-config"],
-  "files": {
-    "includes": ["**", "!pnpm-lock.yaml", "!.mise/locks", "!.github/workflows/pullfrog.yml"]
-  },
   "html": {
     "experimentalFullSupportEnabled": true,
     "formatter": {
       "enabled": true
-    }
-  },
-  "markdown": {
-    "parser": {
-      "frontmatter": true
-    },
-    "formatter": {
-      "formatEmbeds": false
     }
   }
 }
