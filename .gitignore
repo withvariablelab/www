@@ -9,3 +9,7 @@ dist
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# mise
+.mise/*
+!.mise/locks/

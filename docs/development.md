@@ -11,10 +11,11 @@ How to work on www in a clone. The [contributing guide](contributing.md) covers 
 - `public/`: files copied as is: `robots.txt` and `_headers`.
 - `docs/`: the site's design, content model, content and glossary, the steps to add a Project, and these two guides.
 - `wrangler.jsonc`: how the Worker serves `dist/`.
+- `lefthook.yml` and `lefthook/`: the git hooks.
 
 ## Setup
 
-[mise](https://mise.jdx.dev) pins Node and pnpm (`mise.toml`, `mise.lock`) and puts `node_modules/.bin` on the PATH, so the tools run by name:
+[mise](https://mise.jdx.dev) 2026.10.19 or later pins Node 24, pnpm 12 and [gitleaks](https://github.com/gitleaks/gitleaks) (`mise.toml`, `mise.lock`) and puts `node_modules/.bin` on the PATH, so the tools run by name:
 
 ```sh
 mise install
@@ -22,6 +23,8 @@ pnpm install
 ```
 
 In a shell where mise isn't activated, run them as `mise exec -- <command>`.
+
+`pnpm install` also installs the git hooks: lefthook's postinstall writes them. With `CI` set, that postinstall skips them, so after a `CI=1 pnpm install` run `lefthook install` to add them.
 
 ## Tasks
 
@@ -38,11 +41,10 @@ wrangler deploy --dry-run   # the deploy, without deploying
 
 ## CI
 
-- **On each pull request to `main`:** CI runs `pnpm rr check` and `pnpm astro build`, and Workflow audit runs zizmor on the workflows. Both are required checks.
+- **On each commit:** the git hooks ([lefthook](https://lefthook.dev)) run `rr jsc --fix-staged` on the staged files, `rr tsc` when a TypeScript or `.astro` file or a tsconfig changes, and gitleaks on the staged changes, in parallel. `lefthook.yml` extends `base.yml`, the config `@rrlab/cli` ships, and then `lefthook/tsc.yml`, which adds `.astro` files to its `tsc` job. Its own `shared-hooks` job fails the commit, saying to run `pnpm install`, when `base.yml` is missing from `node_modules`. There is no pre-push hook: www has no tests.
+- **On each pull request to `main`:** CI runs `pnpm rr check` and `pnpm astro build` with the tools mise pins, and beside them gitleaks scans the pull request's commits for secrets. CI's `Check` passes when both do. Workflow audit runs zizmor on the workflows. Both are required checks.
 - **On each push:** Workers Builds builds the branch. `main` deploys the site, and every other branch deploys its own Preview, as [Deploying](#deploying) says.
 - **Every Monday:** a workflow runs `pnpm audit` on `pnpm-lock.yaml`, and keeps an issue labeled `dependency-audit` open while it finds known vulnerabilities (Dependency audit). Dependabot opens pull requests for security updates only, never for version updates.
-
-The repo has no git hooks.
 
 ## How `lab.variable.land` is split
 
@@ -66,12 +68,12 @@ This Worker serves `/<project>` with no redirect, and redirects `/<project>/` to
 
 Deployed with [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) (Git integration). Its build settings, under the Worker's Settings → Build, have two sets: Production, for `main`, and Previews Base, for every other branch.
 
-| Setting | Production | Previews Base |
-| --- | --- | --- |
-| Root directory | `/` | `/` |
-| Build command | `pnpm exec astro build` | `pnpm exec astro build` |
-| Build variable | `NODE_VERSION` = `24` | `NODE_VERSION` = `24` |
-| Deploy command | `pnpm exec wrangler deploy` | `npx wrangler preview` |
+| Setting        | Production                  | Previews Base                |
+| -------------- | --------------------------- | ---------------------------- |
+| Root directory | `/`                         | `/`                          |
+| Build command  | `pnpm exec astro build`     | `pnpm exec astro build`      |
+| Build variable | `NODE_VERSION` = `24`       | `NODE_VERSION` = `24`        |
+| Deploy command | `pnpm exec wrangler deploy` | `pnpm exec wrangler preview` |
 
 - The Build command is set in Workers Builds, not as `build.command` in `wrangler.jsonc`. Both `wrangler deploy` and `wrangler preview` would run `build.command` after Workers Builds' own Build command, so every build would run Astro twice.
 - `NODE_VERSION` is there because Workers Builds doesn't read `mise.toml` or `mise.lock`. Without it, a build gets the build image's default Node.
